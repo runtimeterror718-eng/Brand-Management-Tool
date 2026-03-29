@@ -1,0 +1,57 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Models (large files)
+*.bin
+*.pt
+*.onnx
+lid.176.ftz
+lid.176.bin
+
+# Node / React
+frontend/node_modules/
+frontend/build/
+frontend/dist/
+frontend/.env
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# Logs
+*.log
+logs/
+
+# Sessions
+*.session
+*.session-journal
+
+# Temp files
+tmp/
+temp/
+*.tmp
