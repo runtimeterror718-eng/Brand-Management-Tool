@@ -9,6 +9,7 @@ import logging
 import re
 from typing import Any
 
+from config.hinglish_lexicon import get_spam_phrases, is_hinglish
 from storage.dedup import is_duplicate
 
 logger = logging.getLogger(__name__)
@@ -50,7 +51,7 @@ def normalize_text(text: str) -> str:
 
 
 def is_spam(text: str) -> bool:
-    """Simple spam detection heuristics."""
+    """Spam detection with English + Hinglish spam phrases."""
     if not text or len(text.strip()) < 5:
         return True
     lower = text.lower()
@@ -69,6 +70,8 @@ def is_spam(text: str) -> bool:
                 "click the link",
             ]
         ),
+        # Hinglish spam phrases (Instagram/Telegram specific)
+        any(phrase in lower for phrase in get_spam_phrases()),
     ]
     return sum(spam_signals) >= 2
 
@@ -101,8 +104,10 @@ def clean_batch(
             stats["spam"] += 1
             continue
 
-        # Language detection
+        # Language detection (Hinglish often detected as 'en' — keep it)
         lang = detect_language(text)
+        if lang == "en" and is_hinglish(text):
+            lang = "hi"  # reclassify Hinglish as Hindi for pipeline
         mention["language"] = lang
         if lang not in allowed_languages:
             stats["lang_filtered"] += 1
