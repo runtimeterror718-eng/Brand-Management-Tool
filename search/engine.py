@@ -8,6 +8,7 @@ Results go through fulfillment before being queued for scraping/transcription.
 from __future__ import annotations
 
 import asyncio
+import importlib
 import logging
 from typing import Any
 
@@ -20,6 +21,17 @@ logger = logging.getLogger(__name__)
 
 # Registry of platform search functions — populated by scrapers on import
 _platform_searchers: dict[str, Any] = {}
+_SEARCHER_MODULES: dict[str, str] = {
+    "youtube": "scrapers.youtube",
+    "telegram": "scrapers.telegram",
+    "instagram": "scrapers.instagram",
+    "reddit": "scrapers.reddit",
+    "twitter": "scrapers.twitter",
+    "facebook": "scrapers.facebook",
+    "linkedin": "scrapers.linkedin",
+    "seo_news": "scrapers.seo_news",
+}
+_loaded_searcher_modules: set[str] = set()
 
 
 def register_searcher(platform: str, search_fn):
@@ -28,6 +40,36 @@ def register_searcher(platform: str, search_fn):
     Each search_fn signature: async def search(params: SearchParams) -> list[dict]
     """
     _platform_searchers[platform] = search_fn
+
+
+def ensure_searchers_loaded(platforms: list[str] | None = None) -> None:
+    """
+    Deterministically import scraper modules so register_searcher side effects run.
+
+    Safe to call multiple times.
+    """
+    requested_platforms = platforms or list(_SEARCHER_MODULES.keys())
+    for platform in requested_platforms:
+        module_path = _SEARCHER_MODULES.get(platform)
+        if not module_path:
+            continue
+        if module_path in _loaded_searcher_modules:
+            continue
+        try:
+            importlib.import_module(module_path)
+            _loaded_searcher_modules.add(module_path)
+            if platform not in _platform_searchers:
+                logger.warning(
+                    "Searcher bootstrap loaded %s but platform %s was not registered",
+                    module_path,
+                    platform,
+                )
+        except Exception:
+            logger.exception(
+                "Searcher bootstrap failed for platform %s via %s",
+                platform,
+                module_path,
+            )
 
 
 async def search_platform(
@@ -48,6 +90,7 @@ async def search_platform(
 
 async def search_all(params: SearchParams) -> dict[str, list[dict]]:
     """Search all requested platforms concurrently."""
+    ensure_searchers_loaded(params.platforms)
     tasks = {
         platform: search_platform(platform, params)
         for platform in params.platforms
@@ -75,6 +118,7 @@ async def search_and_fulfill(
     Returns list of fulfilled results ready for scraping/transcription queues.
     """
     params = build_search_params(raw_params)
+    ensure_searchers_loaded(params.platforms)
     all_results = await search_all(params)
 
     fulfilled = []

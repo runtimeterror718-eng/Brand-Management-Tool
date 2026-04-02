@@ -1,6 +1,6 @@
 # Brand Management Tool - Project Context for LLMs
 
-Last updated: 2026-03-30
+Last updated: 2026-03-31
 
 ## 1) What this project is
 
@@ -129,23 +129,118 @@ Shared infra:
 - Visual components:
   - `MentionCard`, `SeverityBadge`, `SentimentChart`, `PlatformBreakdown`
 
-## 5) Data model context (Supabase tables referenced)
+## 5) Data model context (Supabase live schema, verified)
 
-Based on storage queries and frontend usage, primary tables are:
-- `brands`
-- `mentions`
-- `fulfillment_results`
-- `transcriptions`
-- `severity_scores`
-- `analysis_runs`
+Verification source (run on 2026-03-31):
+- Supabase REST OpenAPI introspection (`/rest/v1/`)
+- Supabase Management API SQL against `information_schema` / `pg_indexes`
 
-Critical mention fields used across modules:
-- identity: `id`, `brand_id`, `platform`
-- content: `content_text`, `content_type`, `source_url`, `raw_data`
-- author: `author_handle`, `author_name`
-- metrics: `engagement_score`, `likes`, `shares`, `comments_count`
-- analysis: `language`, `sentiment_score`, `sentiment_label`, `cluster_id`
-- timestamps: `published_at`, `scraped_at`
+Public schema currently has 24 tables.
+
+### 5.1 Core pipeline tables (actively used by current backend/frontend code)
+
+1) `brands`
+- Purpose: source-of-truth brand config.
+- Required: `id`, `name`
+- Important columns: `keywords[]`, `hashtags[]`, `platforms[]`, `competitors[]`, `created_at`
+- Keys: PK `id`
+
+2) `mentions`
+- Purpose: normalized cross-platform mention record used by analysis + dashboard.
+- Required: `id`, `platform`
+- Important columns:
+  - identity: `id`, `brand_id`, `platform`, `platform_ref_id`
+  - content: `content_text`, `content_type`, `source_url`, `raw_data`
+  - author: `author_handle`, `author_name`
+  - metrics: `engagement_score`, `likes`, `shares`, `comments_count`
+  - analysis: `sentiment_score`, `sentiment_label`, `language`, `cluster_id`, `theme`
+  - timestamps: `published_at`, `scraped_at`, `duplicate_of`
+- Keys: PK `id`; FK `brand_id -> brands.id`
+- Indexes: `idx_mentions_brand`, `idx_mentions_platform`, `idx_mentions_scraped`
+
+3) `fulfillment_results`
+- Purpose: pass/fail scoring and queue decisions for search results.
+- Required: `id`
+- Important columns: `mention_id`, `passed`, `score`, `criteria_met`, `queued_for_scraping`, `queued_for_transcription`, `evaluated_at`
+- Keys: PK `id`; FK `mention_id -> mentions.id`
+
+4) `transcriptions`
+- Purpose: transcript payloads attached to mention-level media.
+- Required: `id`
+- Important columns: `mention_id`, `source_type`, `transcript_text`, `language`, `duration_seconds`, `brand_mentions`, `created_at`
+- Keys: PK `id`; FK `mention_id -> mentions.id`
+
+5) `severity_scores`
+- Purpose: persisted severity components and final level per mention.
+- Required: `id`, `severity_level`
+- Important columns: `mention_id`, `brand_id`, `severity_score`, `sentiment_component`, `engagement_component`, `velocity_component`, `keyword_component`, `computed_at`
+- Keys: PK `id`; FK `mention_id -> mentions.id`; FK `brand_id -> brands.id`
+- Indexes: `idx_severity_brand`, `idx_severity_level`
+
+6) `analysis_runs`
+- Purpose: aggregated daily/periodic analysis summaries per brand.
+- Required: `id`
+- Important columns: `brand_id`, `total_mentions`, `overall_sentiment`, `cluster_count`, `themes`, `risks`, `opportunities`, `severity_summary`, `llm_cost_usd`, `ran_at`
+- Keys: PK `id`; FK `brand_id -> brands.id`
+
+### 5.2 Platform/raw ingestion tables present in DB (not currently wired through `storage/queries.py`)
+
+- Facebook: `facebook_pages`, `facebook_posts`, `facebook_comments`, `facebook_groups`, `facebook_page_insights`, `facebook_post_insights`
+- Instagram: `instagram_accounts`, `instagram_posts`, `instagram_comments`
+- YouTube: `youtube_channels`, `youtube_videos`, `youtube_comments`
+- X/Twitter: `twitter_tweets`
+- Telegram: `telegram_messages`
+- Reddit: `reddit_posts`, `reddit_comments`
+- LinkedIn: `linkedin_posts`
+- SEO/news: `google_seo_results`
+
+Observed pattern:
+- Most top-level raw entities carry `brand_id -> brands.id`.
+- Child/comment-style tables frequently use text IDs (like `post_id`, `video_id`) without DB-level FK constraints.
+
+### 5.3 Verified FK relationship map (public schema)
+
+- `brands.id` is referenced by:
+  - `analysis_runs.brand_id`
+  - `mentions.brand_id`
+  - `severity_scores.brand_id`
+  - `facebook_groups.brand_id`
+  - `facebook_pages.brand_id`
+  - `facebook_posts.brand_id`
+  - `google_seo_results.brand_id`
+  - `instagram_accounts.brand_id`
+  - `instagram_posts.brand_id`
+  - `linkedin_posts.brand_id`
+  - `reddit_posts.brand_id`
+  - `telegram_messages.brand_id`
+  - `twitter_tweets.brand_id`
+  - `youtube_channels.brand_id`
+  - `youtube_videos.brand_id`
+- `mentions.id` is referenced by:
+  - `fulfillment_results.mention_id`
+  - `transcriptions.mention_id`
+  - `severity_scores.mention_id`
+
+### 5.4 Uniqueness and indexing highlights
+
+- Unique external IDs:
+  - `facebook_pages.page_id`
+  - `facebook_posts.post_id`
+  - `instagram_posts.post_id`
+  - `reddit_posts.post_id`
+  - `twitter_tweets.tweet_id`
+  - `youtube_videos.video_id`
+- Notable non-PK indexes:
+  - brand-path indexes on `mentions`, `severity_scores`, and raw platform tables (for brand-scoped reads)
+  - recency/platform indexes on `mentions` (`idx_mentions_scraped`, `idx_mentions_platform`)
+
+### 5.5 How these tables should be connected in this project
+
+- Current application contract uses the normalized pipeline:
+  - `brands -> mentions -> {fulfillment_results, transcriptions, severity_scores}`
+  - `brands -> analysis_runs`
+- Raw platform tables should be treated as source/landing tables and mapped into `mentions` for cross-platform analytics.
+- Because many `*_id` fields in raw/comment tables are not constrained by FK, application logic (or future migrations) must enforce lineage/integrity.
 
 ## 6) Configuration and environment
 
@@ -246,4 +341,3 @@ If you are a new LLM/session agent, start here:
   - `frontend/src/pages/*`
   - `frontend/src/components/*`
   - `frontend/src/lib/supabase.js`
-

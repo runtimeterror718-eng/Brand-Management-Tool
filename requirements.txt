@@ -31,9 +31,11 @@ fasttext-wheel>=0.9.2
 
 # LLM
 anthropic>=0.39.0
+openai>=1.55.0
 
 # Task Queue
 celery[redis]>=5.3.0
 
 # Utilities
 loguru>=0.7.0
+apify-client>=1.8.1

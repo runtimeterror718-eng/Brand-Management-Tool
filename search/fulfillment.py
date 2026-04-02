@@ -91,3 +91,40 @@ def evaluate_batch(
         if outcome["passed"]:
             evaluated.append(outcome)
     return evaluated
+
+
+def build_youtube_fulfillment_from_triage(
+    triage_label: str,
+    confidence: float,
+    is_pr_risk: bool,
+) -> dict[str, Any]:
+    """
+    Convert YouTube title triage output into fulfillment flags.
+
+    For YouTube unofficial flow, "passed" means the mention should proceed
+    to deeper investigation and enrichment.
+    """
+    label = (triage_label or "uncertain").strip().lower()
+    conf = max(0.0, min(1.0, float(confidence or 0.0)))
+
+    is_flagged = label in {"negative", "uncertain"} or bool(is_pr_risk)
+    if label == "negative":
+        score = conf
+    elif label == "uncertain":
+        score = max(conf, 0.5)
+    else:
+        score = max(0.0, 1.0 - conf)
+
+    criteria_met = {
+        "triage_label": label,
+        "is_pr_risk": bool(is_pr_risk),
+        "confidence_ge_0_5": conf >= 0.5,
+        "requires_deep_enrichment": is_flagged,
+    }
+    return {
+        "passed": is_flagged,
+        "score": round(score, 3),
+        "criteria_met": criteria_met,
+        "queued_for_scraping": is_flagged,
+        "queued_for_transcription": is_flagged,
+    }
