@@ -101,29 +101,41 @@ A parent searches "physics wallah" on Google. The first autocomplete? **"physics
 
 ## Quick Start
 
+### Prerequisites
+- Python 3.11+
+- Node.js 18+ and npm
+- Redis (for Celery task queue)
+
 ### 1. Install Dependencies
 ```bash
-make install              # Python deps + Playwright
-make setup-models         # Download NLP models (fastText, XLM-RoBERTa, MiniLM)
+make setup                # Install Python deps + Playwright + NLP models
 cd brandscope && npm install  # Frontend deps
 ```
 
 ### 2. Configure Environment
 ```bash
-cp .env.example .env                        # Application config
-cp secrets/.env.keys.example secrets/.env.keys  # API keys
-# Fill in your keys in secrets/.env.keys
+cp .env.example .env                              # Application config (tuning params)
+cp secrets/.env.keys.example secrets/.env.keys     # API keys & credentials
+cp brandscope/.env.local.example brandscope/.env.local  # Frontend env vars
+
+# Fill in your keys:
+#   secrets/.env.keys      -> Supabase, OpenAI, YouTube, Telegram, etc.
+#   brandscope/.env.local  -> NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_KEY
 ```
 
-### 3. Run Services
+### 3. Start Redis
 ```bash
-make worker      # Start Celery worker
-make beat        # Start Celery beat scheduler
-make frontend    # Start Next.js dashboard (localhost:3000)
-make dev         # Start API server (localhost:8000)
+redis-server              # Must be running before workers
 ```
 
-### 4. Run Tests
+### 4. Run Services (each in a separate terminal)
+```bash
+make worker      # Terminal 1: Celery worker (processes scraping/analysis tasks)
+make beat        # Terminal 2: Celery beat (schedules recurring tasks)
+make frontend    # Terminal 3: Next.js dashboard (localhost:3000)
+```
+
+### 5. Run Tests
 ```bash
 make test        # pytest tests/ -v
 make lint        # ruff check .
@@ -133,21 +145,29 @@ make lint        # ruff check .
 
 ## Environment Configuration
 
-Environment is split into two layers for security:
+Environment is split into three files for security:
 
 | File | Purpose | Committed? |
 |---|---|---|
-| `.env` | Non-secret config: tuning params, model names, service URLs | No (template in `.env.example`) |
-| `secrets/.env.keys` | All API keys, passwords, tokens | No (template in `secrets/.env.keys.example`) |
+| `.env` | Non-secret config: tuning params, model names, service URLs | No (template: `.env.example`) |
+| `secrets/.env.keys` | All API keys, passwords, tokens | No (template: `secrets/.env.keys.example`) |
+| `brandscope/.env.local` | Frontend env vars (NEXT_PUBLIC_*) | No (template: `brandscope/.env.local.example`) |
 
 `config/settings.py` loads `.env` first, then `secrets/.env.keys` overrides with real credentials.
 
-### Required API Keys
+### Required API Keys (minimum to run)
 - **Supabase**: `SUPABASE_URL`, `SUPABASE_KEY`, `SUPABASE_SERVICE_KEY`
-- **LLM**: `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`
+- **Supabase (frontend)**: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_KEY`
+- **LLM**: `ANTHROPIC_API_KEY` or `OPENAI_API_KEY` (at least one)
+- **Redis**: `REDIS_URL` (defaults to `redis://localhost:6379/0`)
+
+### Optional API Keys (per platform)
 - **YouTube**: `YOUTUBE_API_KEY` (Data API v3)
 - **Telegram**: `TELEGRAM_API_ID`, `TELEGRAM_API_HASH`
-- **Redis**: `REDIS_URL`
+- **Instagram**: `IG_USERNAME`, `IG_PASSWORD` + cookies in `secrets/`
+- **Reddit**: `REDDIT_CLIENT_ID`, `REDDIT_CLIENT_SECRET`
+- **Google SEO**: `GOOGLE_API_KEY`, `GOOGLE_CSE_ID`
+- **Alerts**: `SLACK_WEBHOOK_URL`, `EMAIL_USERNAME`, `EMAIL_PASSWORD`
 
 ---
 

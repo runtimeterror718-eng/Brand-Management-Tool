@@ -1,17 +1,27 @@
-.PHONY: install setup-models dev worker beat frontend test lint clean
+.PHONY: install setup-models worker beat frontend test lint clean setup
+
+# Full setup for fresh clone
+setup: install setup-models
+	@echo ""
+	@echo "Setup complete. Next steps:"
+	@echo "  1. cp .env.example .env"
+	@echo "  2. cp secrets/.env.keys.example secrets/.env.keys"
+	@echo "  3. cp brandscope/.env.local.example brandscope/.env.local"
+	@echo "  4. Fill in your API keys in secrets/.env.keys and brandscope/.env.local"
+	@echo "  5. Start Redis: redis-server"
+	@echo "  6. make worker  (in one terminal)"
+	@echo "  7. make beat    (in another terminal)"
+	@echo "  8. make frontend (in another terminal)"
+	@echo ""
 
 # Install Python dependencies
 install:
 	pip install -r requirements.txt
 	playwright install chromium
 
-# Download NLP models
+# Download NLP models (fastText + HuggingFace)
 setup-models:
 	bash scripts/setup_models.sh
-
-# Run the API server (dev)
-dev:
-	python -m uvicorn api:app --reload --port 8000
 
 # Run Celery worker
 worker:
@@ -21,7 +31,7 @@ worker:
 beat:
 	celery -A workers.celery_app beat --loglevel=info
 
-# Run Next.js frontend (BrandScope)
+# Run Next.js frontend (BrandScope on localhost:3000)
 frontend:
 	cd brandscope && npm install && npm run dev
 

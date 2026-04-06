@@ -262,7 +262,7 @@ AZURE_OPENAI_BATCH_POLL_TIMEOUT_SECONDS: int = _env_int(
 )
 
 if not AZURE_OPENAI_ENDPOINT:
-    AZURE_OPENAI_ENDPOINT = "https://southcentralus0125alakhai.openai.azure.com/"
+    AZURE_OPENAI_ENDPOINT = ""
 
 # --- Whisper Remote Proxy ---
 WHISPER_API_KEY: str = _first_env(

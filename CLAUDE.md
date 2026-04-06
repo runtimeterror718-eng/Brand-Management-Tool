@@ -5,11 +5,10 @@ Multi-platform brand monitoring system for Physics Wallah (PW). Scrapes 8 platfo
 
 ## Build & Run Commands
 ```bash
-make install          # Install Python deps + Playwright
-make setup-models     # Download fastText + HF models (scripts/setup_models.sh)
+make setup            # Full install (deps + Playwright + NLP models)
 make worker           # Celery worker
 make beat             # Celery beat scheduler
-make dev              # API server (uvicorn, port 8000)
+make frontend         # Next.js dashboard (localhost:3000)
 make test             # pytest tests/ -v
 make lint             # ruff check .
 make clean            # Remove __pycache__ and build artifacts
