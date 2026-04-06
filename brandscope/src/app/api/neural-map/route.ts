@@ -1,6 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
 import { getCached, setCache } from "@/lib/api-cache";
+import { isDemoMode, demoNeuralMap } from "@/lib/demo-data";
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const key = process.env.SUPABASE_SERVICE_KEY || process.env.NEXT_PUBLIC_SUPABASE_KEY || "";
@@ -36,7 +37,7 @@ export async function GET() {
   const cached = getCached<any>("api:neural-map");
   if (cached) return NextResponse.json(cached);
 
-  if (!url || !key) return NextResponse.json({ nodes: [], links: [] });
+  if (isDemoMode()) return NextResponse.json(demoNeuralMap);
   const sb = createClient(url, key);
 
   const [mentionsRes, ytChannelsRes, tgChannelsRes, clustersRes] = await Promise.all([

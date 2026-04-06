@@ -2,6 +2,7 @@ import { createClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
 import { ragQuery, isRAGEnabled } from "@/lib/rag";
 import { getCached, setCache } from "@/lib/api-cache";
+import { isDemoMode, demoCommandCenter } from "@/lib/demo-data";
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const key = process.env.SUPABASE_SERVICE_KEY || process.env.NEXT_PUBLIC_SUPABASE_KEY || "";
@@ -15,7 +16,7 @@ export async function GET() {
   const cached = getCached<any>("api:command-center");
   if (cached) return NextResponse.json(cached);
 
-  if (!url || !key) return NextResponse.json({ live: false });
+  if (isDemoMode()) return NextResponse.json(demoCommandCenter);
   const sb = createClient(url, key);
   const brandIds = await getAllBrandIds(sb);
   if (!brandIds.length) return NextResponse.json({ live: false });

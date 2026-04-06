@@ -1,5 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
+import { isDemoMode, demoCreators } from "@/lib/demo-data";
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const key = process.env.SUPABASE_SERVICE_KEY || process.env.NEXT_PUBLIC_SUPABASE_KEY || "";
@@ -10,7 +11,7 @@ async function getAllBrandIds(sb: any): Promise<string[]> {
 }
 
 export async function GET() {
-  if (!url || !key) return NextResponse.json({ live: false });
+  if (isDemoMode()) return NextResponse.json(demoCreators);
   const sb = createClient(url, key);
   const brandIds = await getAllBrandIds(sb);
   if (!brandIds.length) return NextResponse.json({ live: false });

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { isDemoMode, demoActionables } from "@/lib/demo-data";
 import {
   getBrandId, embedText, embedBatch, searchNegativeMentions,
   searchClusters, rerankMentions, generateWithContext,
@@ -111,6 +112,7 @@ Return JSON:
 }
 
 export async function GET() {
+  if (isDemoMode()) return NextResponse.json(demoActionables);
   const brandId = await getBrandId();
   if (!brandId) return NextResponse.json({ live: false });
 
