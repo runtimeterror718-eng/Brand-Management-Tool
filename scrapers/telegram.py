@@ -2355,22 +2355,38 @@ class AzureTelegramChannelClassifier:
             or AZURE_OPENAI_DEPLOYMENT_GPT52
         )
         self._client = None
+        # Fallback: use regular OpenAI when Azure is not configured
+        self._use_openai_fallback = False
+        if not (self.api_key and self.endpoint and self.deployment):
+            import os
+            _openai_key = os.environ.get("OPENAI_API_KEY", "")
+            if _openai_key:
+                self._use_openai_fallback = True
+                self._openai_api_key = _openai_key
+                self._openai_model = os.environ.get("OPENAI_MODEL", "gpt-4o-mini")
+                self.deployment = self._openai_model
+                logger.info("AzureTelegramChannelClassifier: Azure not configured, falling back to OpenAI %s", self._openai_model)
 
     @property
     def is_configured(self) -> bool:
-        return bool(self.api_key and self.endpoint and self.deployment)
+        return bool(
+            (self.api_key and self.endpoint and self.deployment)
+            or self._use_openai_fallback
+        )
 
     def _ensure_client(self):
         if self._client is not None:
             return self._client
-
-        from openai import AzureOpenAI
-
-        self._client = AzureOpenAI(
-            api_key=self.api_key,
-            api_version=self.api_version,
-            azure_endpoint=self.endpoint,
-        )
+        if self._use_openai_fallback:
+            from openai import OpenAI
+            self._client = OpenAI(api_key=self._openai_api_key)
+        else:
+            from openai import AzureOpenAI
+            self._client = AzureOpenAI(
+                api_key=self.api_key,
+                api_version=self.api_version,
+                azure_endpoint=self.endpoint,
+            )
         return self._client
 
     def _chat_json(

@@ -1,0 +1,172 @@
+Channel	Data Field	Data Type 	Data Source
+YT	channel id	text	
+	channel subs
+    cribers	int	
+	channel name	text	
+	video id	text	
+	video title	text	
+	video date		
+	video resolution		
+	video duration		
+	video views		
+	video likes		
+	video description		
+	video comment count		
+	comment author		
+	comments		
+	comment replies		
+	comment likes		
+	comment date		
+	media type (using /shorts mechanism if resolution not available)		
+Instagram	Account Name		
+	Followers		
+	Following		
+	Number of Posts		
+	Post ID		
+	Caption text		
+	Like count		
+	Comment count		
+	Comment text		
+	Media type		
+	Published date		
+	Hashtags		
+	Profile followers		
+	Profile posts count		
+	Post URL		
+	Video views		
+	Reel plays		
+Reddit	Post ID	TEXT	
+	Post title	TEXT	
+	Post body (selftext)	TEXT	
+	Author username	TEXT	
+	Subreddit name	TEXT	
+	Score (upvotes - downvotes)	INT	
+	Upvote ratio	FLOAT	
+	Number of comments	INT	
+	Created timestamp (UTC)	TIMESTAMPTZ	
+	Post URL	TEXT	
+	Post flair	TEXT	
+	Is self post	BOOLEAN	
+	Awards received	INT	
+	Comment body	TEXT	
+	Comment score	INT	
+	Comment parent ID	TEXT	
+	Comment depth	INT	
+Google	Autocomplete suggestion	TEXT	
+	People Also Ask question	TEXT	
+	Organic result title	TEXT	
+	Organic result snippet	TEXT	
+	Organic result URL	TEXT	
+	Organic result position	INT	
+	Featured snippet text	TEXT	
+	Knowledge panel info	TEXT	
+	News results	TEXT	
+	Review stars (if shown)	FLOAT	
+	Related searches	TEXT	
+	Search result date	TIMESTAMPTZ	
+X	Tweet ID	TEXT	
+	Tweet text	TEXT	
+	Author username	TEXT	
+	Author ID	TEXT	
+	Author followers count	INT	
+	Author verified status	BOOLEAN	
+	Retweet count	INT	
+	Like count	INT	
+	Reply count	INT	
+	Quote count	INT	
+	Impression count	INT	
+	Created timestamp	TIMESTAMPTZ	
+	Hashtags	TEXT[]	
+	Mentioned users	TEXT[]	
+	In reply to tweet ID	TEXT	
+	Is retweet	BOOLEAN	
+	Tweet URL	TEXT	
+	Language	TEXT	
+	Media attachments	JSONB	
+Telegram	Message ID	TEXT	
+	Message text	TEXT	
+	Sender username	TEXT	
+	Sender ID	TEXT	
+	Channel/group name	TEXT	
+	Channel/group ID	TEXT	
+	Views (channel posts)	INT	
+	Forwards count	INT	
+	Reply to message ID	TEXT	
+	Reactions	JSONB	
+	Timestamp	TIMESTAMPTZ	
+	Message URL	TEXT	
+	Media type	TEXT	
+	Is pinned	BOOLEAN	
+LinkedIn	Post text	TEXT	
+	Author name	TEXT	
+	Author headline	TEXT	
+	Reactions count	INT	
+	Comments count	INT	
+	Shares count	INT	
+	Published date	TIMESTAMPTZ	
+	Company page followers	INT	
+	Employee count	INT	
+	Job postings count	INT	
+	Post URL	TEXT	
+Facebook	Page ID	TEXT	
+	Page name	TEXT	
+	Page category	TEXT	
+	Page fan count (likes)	INT	
+	Page follower count	INT	
+	Page about text	TEXT	
+	Page website	TEXT	
+	Page verification status	BOOLEAN	
+	Page rating (if enabled)	FLOAT	
+	Page rating count	INT	
+	Post ID	TEXT	
+	Post message text	TEXT	
+	Post story (auto-gen text)	TEXT	
+	Post type	TEXT	
+	Post created time	TIMESTAMPTZ	
+	Post permalink URL	TEXT	
+	Post shares count	INT	
+	Post status type	TEXT	
+	Attached link URL	TEXT	
+	Attached link caption	TEXT	
+	Post description	TEXT	
+	Full picture URL	TEXT	
+	Is published	BOOLEAN	
+	Post updated time	TIMESTAMPTZ	
+	Total reactions count	INT	
+	LIKE reactions count	INT	
+	LOVE reactions count	INT	
+	HAHA reactions count	INT	
+	WOW reactions count	INT	
+	SAD reactions count	INT	
+	ANGRY reactions count	INT	
+	Comment ID	TEXT	
+	Comment message text	TEXT	
+	Comment author name	TEXT	
+	Comment author ID	TEXT	
+	Comment created time	TIMESTAMPTZ	
+	Comment like count	INT	
+	Comment reply count	INT	
+	Comment parent ID	TEXT	
+	Comment permalink	TEXT	
+	Comment attachment type	TEXT	
+	Comment attachment URL	TEXT	
+	Can reply to comment	BOOLEAN	
+	Is comment hidden	BOOLEAN	
+	Page impressions (daily)	INT	
+	Page engaged users (daily)	INT	
+	Page fans (total)	INT	
+	Page fan adds (daily)	INT	
+	Page fan removes (daily)	INT	
+	Page negative feedback	INT	
+	Post impressions	INT	
+	Post engaged users	INT	
+	Post clicks	INT	
+	Post reactions by type	JSONB	
+	Post negative feedback	INT	
+	Group post text	TEXT	
+	Group post author	TEXT	
+	Group post reactions	INT	
+	Group post comments	INT	
+	Group name	TEXT	
+	Group member count	INT	
+	Page search results	TEXT	

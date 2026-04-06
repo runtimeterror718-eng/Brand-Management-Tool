@@ -105,7 +105,7 @@ async def get_transcript_with_fallback(
     if languages is None:
         languages = ["en", "hi"]
 
-    attempt_order = ["youtube_captions", "external_provider", "whisper_fallback"]
+    attempt_order = ["youtube_captions", "whisper_fallback"]
 
     try:
         captions = await get_captions_async(video_id, languages=languages)
@@ -125,28 +125,8 @@ async def get_transcript_with_fallback(
             "attempt_order": attempt_order,
         }
 
-    if external_provider_fn is None:
-        from transcription.extractor import get_external_transcript_async
-
-        external_provider_fn = get_external_transcript_async
-
-    try:
-        provider_result = await external_provider_fn(video_id, languages)
-    except Exception as exc:
-        logger.warning("External transcript provider exception for %s: %s", video_id, exc)
-        provider_result = {
-            "text": "",
-            "language": "",
-            "segments": [],
-            "duration": 0,
-            "source_metadata": {"provider": "external_provider", "error": str(exc)},
-        }
-    if provider_result.get("text"):
-        return {
-            **provider_result,
-            "source_type": "external_provider",
-            "attempt_order": attempt_order,
-        }
+    # Skip Apify external provider — go straight to Whisper
+    logger.info("No captions for %s, falling back to Whisper transcription", video_id)
 
     if audio_downloader_fn is None:
         from transcription.extractor import download_audio

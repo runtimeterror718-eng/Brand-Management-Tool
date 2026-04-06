@@ -30,7 +30,7 @@ def load_crisis_keywords(brand: dict[str, Any]) -> list[str]:
     keywords.extend(HINGLISH_CRISIS_KEYWORDS)
 
     # Add competitor names as risk keywords
-    competitors = brand.get("competitors", [])
+    competitors = brand.get("competitors") or []
     keywords.extend([c.lower() for c in competitors])
 
     return keywords

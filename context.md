@@ -7,9 +7,18 @@ Default rule: Codex should only work in Esha-owned platform areas unless the pro
 
 ## Product Snapshot
 - System: PW Brand Management / PR Intelligence
-- Data storage: Supabase
+- Data storage: Supabase (project ref: `bieocyzyybjetzornlfw`, region: ap-south-1)
 - Runtime/deployment: Railway + ngrok
 - UI: React (`frontend/`)
+- Task queue: Celery + Redis
+
+## Current State (updated 2026-03-31)
+- Supabase schema deployed: 24 tables (brands + 8 platform tables + mentions + severity + analysis)
+- Instagram pipeline: LIVE — full scrape→store pipeline in `scrapers/instagram.py` with dedicated Celery task
+- Reddit pipeline: LIVE — full scrape→store pipeline in `scrapers/reddit.py` with dedicated Celery task
+- YouTube/Telegram/X/SEO: generic scrape path via `scrape_platform` task (no platform-specific table storage yet)
+- Facebook/LinkedIn: stub scrapers (TBD)
+- Hinglish lexicon: 350+ terms integrated into severity + sentiment
 
 ## Ownership Map (Channel End-to-End)
 - YouTube Analysis -> Esha
@@ -22,6 +31,16 @@ Default rule: Codex should only work in Esha-owned platform areas unless the pro
 - X -> Abhishek
 
 Note: in this codebase, X is currently represented as `twitter` (`scrapers/twitter.py`).
+
+## Supabase Tables by Owner
+Abhishek tables: `instagram_accounts`, `instagram_posts`, `instagram_comments`, `reddit_posts`, `reddit_comments`, `google_seo_results`, `twitter_tweets`
+Esha tables: `youtube_channels`, `youtube_videos`, `youtube_comments`, `telegram_messages`, `facebook_pages`, `facebook_posts`, `facebook_comments`, `facebook_page_insights`, `facebook_post_insights`, `facebook_groups`, `linkedin_posts`
+Shared tables: `brands`, `mentions`, `transcriptions`, `severity_scores`, `fulfillment_results`, `analysis_runs`
+
+## Celery Tasks by Owner
+Abhishek tasks: `scrape_instagram`, `scrape_reddit`, `scrape_platform("twitter")`, `scrape_platform("seo_news")`
+Esha tasks: `scrape_platform("youtube")`, `scrape_platform("telegram")`
+Shared tasks: `run_full_analysis`, `check_alerts`, `send_weekly_report`
 
 ## Esha Editable Scope (Default)
 Primary Esha platform files:

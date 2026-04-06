@@ -1,5 +1,6 @@
 """
 Common Supabase queries for all tables.
+Covers: brands, platform-specific tables, mentions, severity, fulfillment, analysis.
 """
 
 from __future__ import annotations
@@ -30,7 +31,102 @@ def upsert_brand(brand: dict) -> dict:
 
 
 # ---------------------------------------------------------------------------
-# Mentions
+# Instagram
+# ---------------------------------------------------------------------------
+
+def upsert_instagram_account(account: dict) -> dict:
+    resp = get_service_client().table("instagram_accounts").upsert(account).execute()
+    return resp.data[0]
+
+
+def insert_instagram_post(post: dict) -> dict:
+    resp = get_service_client().table("instagram_posts").upsert(
+        post, on_conflict="post_id"
+    ).execute()
+    return resp.data[0]
+
+
+def insert_instagram_posts_batch(posts: list[dict]) -> list[dict]:
+    if not posts:
+        return []
+    resp = get_service_client().table("instagram_posts").upsert(
+        posts, on_conflict="post_id"
+    ).execute()
+    return resp.data
+
+
+def insert_instagram_comment(comment: dict) -> dict:
+    resp = get_service_client().table("instagram_comments").insert(comment).execute()
+    return resp.data[0]
+
+
+def insert_instagram_comments_batch(comments: list[dict]) -> list[dict]:
+    if not comments:
+        return []
+    resp = get_service_client().table("instagram_comments").insert(comments).execute()
+    return resp.data
+
+
+def get_instagram_posts(brand_id: str, limit: int = 100) -> list[dict]:
+    resp = (
+        get_service_client()
+        .table("instagram_posts")
+        .select("*")
+        .eq("brand_id", brand_id)
+        .order("scraped_at", desc=True)
+        .limit(limit)
+        .execute()
+    )
+    return resp.data
+
+
+# ---------------------------------------------------------------------------
+# Reddit
+# ---------------------------------------------------------------------------
+
+def insert_reddit_post(post: dict) -> dict:
+    resp = get_service_client().table("reddit_posts").upsert(
+        post, on_conflict="post_id"
+    ).execute()
+    return resp.data[0]
+
+
+def insert_reddit_posts_batch(posts: list[dict]) -> list[dict]:
+    if not posts:
+        return []
+    resp = get_service_client().table("reddit_posts").upsert(
+        posts, on_conflict="post_id"
+    ).execute()
+    return resp.data
+
+
+def insert_reddit_comment(comment: dict) -> dict:
+    resp = get_service_client().table("reddit_comments").insert(comment).execute()
+    return resp.data[0]
+
+
+def insert_reddit_comments_batch(comments: list[dict]) -> list[dict]:
+    if not comments:
+        return []
+    resp = get_service_client().table("reddit_comments").insert(comments).execute()
+    return resp.data
+
+
+def get_reddit_posts(brand_id: str, limit: int = 100) -> list[dict]:
+    resp = (
+        get_service_client()
+        .table("reddit_posts")
+        .select("*")
+        .eq("brand_id", brand_id)
+        .order("scraped_at", desc=True)
+        .limit(limit)
+        .execute()
+    )
+    return resp.data
+
+
+# ---------------------------------------------------------------------------
+# Mentions (unified cross-platform)
 # ---------------------------------------------------------------------------
 
 def insert_mention(mention: dict) -> dict:
@@ -1016,17 +1112,43 @@ def get_mention_count_since(
 
 
 def get_hourly_mention_rate(brand_id: str, last_hours: int = 2) -> float:
-    since = datetime.utcnow().replace(
-        microsecond=0
-    ) - __import__("datetime").timedelta(hours=last_hours)
+    since = datetime.utcnow().replace(microsecond=0) - timedelta(hours=last_hours)
     count = get_mention_count_since(brand_id, since)
     return count / max(last_hours, 1)
 
 
 def get_avg_hourly_rate(brand_id: str, last_days: int = 7) -> float:
-    since = datetime.utcnow().replace(
-        microsecond=0
-    ) - __import__("datetime").timedelta(days=last_days)
+    since = datetime.utcnow().replace(microsecond=0) - timedelta(days=last_days)
     count = get_mention_count_since(brand_id, since)
     total_hours = last_days * 24
     return count / max(total_hours, 1)
+
+
+# ---------------------------------------------------------------------------
+# Geographic data
+# ---------------------------------------------------------------------------
+
+def get_geo_aggregates(brand_id: str) -> list[dict]:
+    resp = (
+        get_service_client()
+        .table("geo_aggregates")
+        .select("*")
+        .eq("brand_id", brand_id)
+        .order("negative_pct", desc=True)
+        .execute()
+    )
+    return resp.data
+
+
+def get_geo_mentions(brand_id: str, state_code: str | None = None, limit: int = 200) -> list[dict]:
+    q = (
+        get_service_client()
+        .table("geo_mentions")
+        .select("*")
+        .eq("brand_id", brand_id)
+        .order("created_at", desc=True)
+        .limit(limit)
+    )
+    if state_code:
+        q = q.eq("state_code", state_code)
+    return q.execute().data

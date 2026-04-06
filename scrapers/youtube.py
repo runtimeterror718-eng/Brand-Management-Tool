@@ -54,6 +54,7 @@ DEFAULT_QUERY_CHUNK_SIZE = 8
 
 
 PRIMARY_PW_QUERY_TERMS = (
+    # ── Core brand ──────────────────────────────────────────────
     "physics wallah",
     "physics wala",
     "physicswallah",
@@ -62,6 +63,8 @@ PRIMARY_PW_QUERY_TERMS = (
     "pw live",
     "pw app",
     "pw website",
+    "pw.live",
+    # ── Products / Batches ──────────────────────────────────────
     "pw batch",
     "pw course",
     "pw classes",
@@ -88,6 +91,7 @@ PRIMARY_PW_QUERY_TERMS = (
     "pw foundation",
     "pw sankalp",
     "pw umeed",
+    "pw neev",
     "pw ncert punch",
     "pw crash course",
     "pw revision batch",
@@ -113,6 +117,13 @@ PRIMARY_PW_QUERY_TERMS = (
     "udaan neet pw",
     "yakeen neet pw",
     "prayas jee pw",
+    "arjuna batch",
+    "lakshya batch",
+    "yakeen batch",
+    "prayas batch",
+    "udaan batch",
+    "neev batch",
+    # ── Wallah vertical brands ──────────────────────────────────
     "jee wallah",
     "neet wallah",
     "banking wallah",
@@ -127,6 +138,10 @@ PRIMARY_PW_QUERY_TERMS = (
     "mba wallah",
     "defence wallah",
     "ncert wallah",
+    "competition wallah",
+    "pw only ias",
+    "pw onlyias",
+    # ── Vidyapeeth (offline centres) ────────────────────────────
     "pw vidyapeeth",
     "vidyapeeth pw",
     "pw pathshala",
@@ -143,12 +158,38 @@ PRIMARY_PW_QUERY_TERMS = (
     "pw up vidyapeeth",
     "pw patna vidyapeeth",
     "pw kota vidyapeeth",
+    "vidyapeeth bhopal",
+    "vidyapeeth jaipur",
+    "vidyapeeth delhi",
+    "vidyapeeth indore",
+    "vidyapeeth gandhinagar",
+    # ── PW IOI (Institute of Innovation) ────────────────────────
+    "pw ioi",
+    "pwioi",
+    "pw institute of innovation",
+    "pw ioi hackathon",
+    "pw ioi bangalore",
+    "medhavi skills university pw",
+    # ── PW Skills (upskilling vertical) ─────────────────────────
+    "pw skills",
+    "pwskills",
+    "pw skills review",
+    "pw skills data science",
+    "pw skills full stack",
+    "pw skills devops",
+    "pw skills data analytics",
+    "pw skills course review",
+    "pw skills placement",
+    "pw skills fraud",
+    "pw skills scam",
+    # ── MedEd (medical education) ───────────────────────────────
     "pw meded",
     "meded pw",
     "pw med ed",
     "pw neet pg",
     "pw fmge",
     "pw inicet",
+    # ── Other exam verticals ────────────────────────────────────
     "pw banking",
     "pw ssc",
     "pw gate",
@@ -160,6 +201,9 @@ PRIMARY_PW_QUERY_TERMS = (
     "pw commerce",
     "pw ca",
     "pw cs",
+    "pw ugc net",
+    "pw olympiad",
+    # ── Founders / Leadership ───────────────────────────────────
     "alakh pandey",
     "alakh sir",
     "alakh pandey pw",
@@ -172,32 +216,113 @@ PRIMARY_PW_QUERY_TERMS = (
     "prateek maheshwari pw",
     "prateek sir pw",
     "prateek maheshwari physics wallah",
+    "prateek boob",
+    # ── Negative PR / Controversy signals ───────────────────────
+    "pw scam",
+    "pw fraud",
+    "pw exposed",
+    "pw controversy",
+    "pw refund",
+    "pw layoffs",
+    "pw data leak",
+    "pw data breach",
+    "pw quality",
+    "pw downfall",
+    "pw fired",
+    "pw terminated",
+    "pw bribe",
+    "pw bribery",
+    "physics wallah scam",
+    "physics wallah fraud",
+    "physics wallah refund",
+    "physics wallah controversy",
+    "physics wallah exposed",
+    "physics wallah complaint",
+    "pw consumer court",
+    "pw unpaid",
+    "pw salary",
+    "pw attrition",
+    "physics wallah vs byju",
+    "physics wallah vs unacademy",
+    "physics wallah vs allen",
+    # ── Kashmir / casteist controversies ─────────────────────────
+    "pw kashmir",
+    "pw fir",
+    "pw toofan",
+    "baderkote pw",
+    "chor chamar pw",
+    "rishi jain pw",
+    "casteist pw",
+    # ── IPO / Business ──────────────────────────────────────────
+    "pw ipo",
+    "physicswallah ipo",
+    "physics wallah ipo",
+    "pw stock",
+    "pw share price",
+    "pw listing",
+    "pw valuation",
+    # ── Teacher exodus / hiring ─────────────────────────────────
+    "pw teachers leaving",
+    "left pw",
+    "quit pw",
+    "resigned pw",
+    "pw sell pen interview",
+    "pw interview experience",
+    "pw glassdoor",
+    "pw employee review",
 )
 
 SECONDARY_PW_QUERY_TERMS = (
+    # ── Top faculty (Physics) ───────────────────────────────────
+    "rajwant sir pw",
+    "rajwant sir physics wallah",
+    "rj sir pw",
+    "saleem sir pw",
+    "saleem sir physics wallah",
+    "nkc sir pw",
+    "neeraj kumar choudhary pw",
+    "amit sir pw",
+    "amit mahajan sir pw",
+    "sachin sir pw",
+    "sachin jakhar sir",
+    "sarvesh sir pw",
+    # ── Top faculty (Chemistry) ─────────────────────────────────
+    "om pandey pw",
+    "om sir pw",
+    "pankaj sir pw",
+    "babua sir pw",
+    "anushka mam pw",
+    "anushka mam physics wallah",
+    # ── Top faculty (Biology) ───────────────────────────────────
+    "nidhi mam pw",
+    "nidhi mam biology pw",
+    # ── Top faculty (Maths) ─────────────────────────────────────
+    "mr sir pw",
+    "mr sir physics wallah",
+    "ritik sir pw",
+    "ritik sir physics wallah",
+    # ── Top faculty (General / Other) ───────────────────────────
     "samriddhi maam",
     "samriddhi mam",
     "samridhi maam",
     "samridhi mam",
     "samriddhi pw",
     "samridhi pw",
-    "ritik sir pw",
-    "ritik sir physics wallah",
-    "rajwant sir pw",
-    "rajwant sir physics wallah",
-    "saleem sir pw",
-    "saleem sir physics wallah",
-    "mr sir pw",
-    "mr sir physics wallah",
-    "om pandey pw",
-    "om sir pw",
     "tarun sir pw",
-    "babua sir pw",
-    "pankaj sir pw",
+    "tarun kumar physics pw",
     "khazana pw faculty",
     "pw faculty live",
     "pw faculties",
     "pw teacher live",
+    # ── Ex-PW teachers / criticism ──────────────────────────────
+    "sankalp bharat pw",
+    "tarun kumar left pw",
+    "manish dubey pw",
+    "sarvesh dixit pw",
+    "udaan companions reality",
+    "ex pw teacher",
+    "pw teacher controversy",
+    # ── Misspellings / alternate names ──────────────────────────
     "physics wala pw",
     "physics walla",
     "phisics wallah",
@@ -210,7 +335,26 @@ SECONDARY_PW_QUERY_TERMS = (
     "samriddhi mam pw",
     "pw med ed",
     "pw vidhyapeeth",
-    "pw vidhyapeeth",
+    # ── Edtech commentary / comparison ──────────────────────────
+    "kota factory memes pw",
+    "neet jee aspirants pw",
+    "pw vs allen youtube",
+    "pw vs unacademy review",
+    "pw vs byju review",
+    "pw vs vedantu",
+    "pw vs aakash",
+    "best coaching jee neet 2026",
+    "edtech scam india",
+    "edtech fraud india",
+    # ── App / product reviews ───────────────────────────────────
+    "pw app review",
+    "pw app crash",
+    "pw app not working",
+    "pw app rating",
+    "physics wallah app review",
+    "pw modules review",
+    "pw books review",
+    "pw dpp quality",
 )
 
 EXPANDED_PW_QUERY_RULES = (
@@ -220,9 +364,16 @@ EXPANDED_PW_QUERY_RULES = (
     ("yakeen", ("pw", "physics wallah")),
     ("prayas", ("pw", "physics wallah")),
     ("manzil", ("pw", "physics wallah")),
+    ("neev", ("pw", "physics wallah")),
+    ("sankalp", ("pw", "physics wallah")),
+    ("umeed", ("pw", "physics wallah")),
     ("vidyapeeth", ("pw", "physics wallah")),
     ("pathshala", ("pw", "physics wallah")),
     ("meded", ("pw", "physics wallah")),
+    ("pw skills", ("review", "scam", "placement")),
+    ("pw ioi", ("review", "hackathon", "bangalore")),
+    ("alakh pandey", ("controversy", "ipo", "motivation", "interview")),
+    ("physics wallah", ("scam", "refund", "complaint", "review", "vs allen", "vs unacademy")),
 )
 
 AMBIGUOUS_STANDALONE_TERMS = frozenset(
@@ -590,32 +741,132 @@ def map_video_to_search_result(candidate: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _load_youtube_api_keys() -> list[str]:
+    """Load all YouTube API keys from env (KEY, KEY_1, KEY_2, KEY_3, KEY_4)."""
+    import os
+    keys = []
+    primary = os.environ.get("YOUTUBE_API_KEY", "")
+    if primary:
+        keys.append(primary)
+    for i in range(1, 10):
+        k = os.environ.get(f"YOUTUBE_API_KEY_{i}", "")
+        if k and k not in keys:
+            keys.append(k)
+    return keys
+
+
+import threading
+
+class _KeyPool:
+    """Thread-safe API key pool with rotation on quota exhaustion."""
+
+    def __init__(self, keys: list[str]):
+        self._keys = list(keys)
+        self._lock = threading.Lock()
+        self._exhausted: set[str] = set()
+        self._current_idx = 0
+
+    @property
+    def total(self) -> int:
+        return len(self._keys)
+
+    def get_key(self) -> str:
+        """Get the current active key (thread-safe)."""
+        with self._lock:
+            available = [k for k in self._keys if k not in self._exhausted]
+            if not available:
+                return ""
+            return available[0]
+
+    def mark_exhausted(self, key: str) -> str | None:
+        """Mark a key as exhausted and return the next available key, or None if all gone."""
+        with self._lock:
+            self._exhausted.add(key)
+            available = [k for k in self._keys if k not in self._exhausted]
+            if not available:
+                logger.error("All %d YouTube API keys exhausted (quota exceeded)", len(self._keys))
+                return None
+            next_key = available[0]
+            logger.info(
+                "YouTube key ...%s exhausted. Rotated to ...%s (%d of %d remaining)",
+                key[-6:], next_key[-6:], len(available), len(self._keys),
+            )
+            return next_key
+
+    def is_all_exhausted(self) -> bool:
+        with self._lock:
+            return len(self._exhausted) >= len(self._keys)
+
+
 class YouTubeDataAPIClient:
     def __init__(self, api_key: str, timeout: float = 30.0):
-        self.api_key = api_key
+        all_keys = _load_youtube_api_keys()
+        if api_key and api_key not in all_keys:
+            all_keys.insert(0, api_key)
+        if not all_keys:
+            all_keys = [api_key] if api_key else []
+        self._pool = _KeyPool(all_keys)
+        self.api_key = self._pool.get_key()  # kept for backward compat
         self.timeout = timeout
+        logger.info("YouTubeDataAPIClient: %d API keys loaded for rotation", self._pool.total)
 
     async def _get(self, endpoint: str, params: dict[str, Any]) -> dict[str, Any]:
-        request_params = dict(params)
-        request_params["key"] = self.api_key
-        async with httpx.AsyncClient(timeout=self.timeout) as client:
-            resp = await client.get(f"{YOUTUBE_API_BASE_URL}{endpoint}", params=request_params)
-            resp.raise_for_status()
-            payload = resp.json()
-            if isinstance(payload, dict) and payload.get("error"):
-                raise RuntimeError(payload["error"])
-            return payload
+        """GET with per-request key selection and retry on 403."""
+        for _attempt in range(self._pool.total + 1):
+            current_key = self._pool.get_key()
+            if not current_key:
+                raise RuntimeError("All YouTube API keys exhausted")
+
+            request_params = dict(params)
+            request_params["key"] = current_key
+            try:
+                async with httpx.AsyncClient(timeout=self.timeout) as client:
+                    resp = await client.get(f"{YOUTUBE_API_BASE_URL}{endpoint}", params=request_params)
+                    if resp.status_code == 403:
+                        next_key = self._pool.mark_exhausted(current_key)
+                        if next_key is None:
+                            resp.raise_for_status()
+                        continue  # retry with next key
+                    resp.raise_for_status()
+                    payload = resp.json()
+                    if isinstance(payload, dict) and payload.get("error"):
+                        raise RuntimeError(payload["error"])
+                    return payload
+            except httpx.HTTPStatusError as e:
+                if e.response.status_code == 403:
+                    next_key = self._pool.mark_exhausted(current_key)
+                    if next_key is None:
+                        raise
+                    continue
+                raise
+        raise RuntimeError("All YouTube API keys exhausted")
 
     def _get_sync(self, endpoint: str, params: dict[str, Any]) -> dict[str, Any]:
-        request_params = dict(params)
-        request_params["key"] = self.api_key
-        with httpx.Client(timeout=self.timeout) as client:
-            resp = client.get(f"{YOUTUBE_API_BASE_URL}{endpoint}", params=request_params)
-            resp.raise_for_status()
-            payload = resp.json()
-            if isinstance(payload, dict) and payload.get("error"):
-                raise RuntimeError(payload["error"])
-            return payload
+        """Sync GET with per-request key selection and retry on 403."""
+        for _attempt in range(self._pool.total + 1):
+            current_key = self._pool.get_key()
+            if not current_key:
+                raise RuntimeError("All YouTube API keys exhausted")
+
+            request_params = dict(params)
+            request_params["key"] = current_key
+            try:
+                with httpx.Client(timeout=self.timeout) as client:
+                    resp = client.get(f"{YOUTUBE_API_BASE_URL}{endpoint}", params=request_params)
+                    if resp.status_code == 403:
+                        self._pool.mark_exhausted(current_key)
+                        continue
+                    resp.raise_for_status()
+                    payload = resp.json()
+                    if isinstance(payload, dict) and payload.get("error"):
+                        raise RuntimeError(payload["error"])
+                    return payload
+            except httpx.HTTPStatusError as e:
+                if e.response.status_code == 403:
+                    self._pool.mark_exhausted(current_key)
+                    continue
+                raise
+        raise RuntimeError("All YouTube API keys exhausted")
 
     async def search_videos(
         self,
@@ -1006,10 +1257,24 @@ class AzureYouTubeAnalyzer:
             or AZURE_OPENAI_DEPLOYMENT_GPT52
         )
         self._client = None
+        # Fallback: use regular OpenAI when Azure is not configured
+        self._use_openai_fallback = False
+        if not (self.api_key and self.endpoint and self.deployment):
+            import os
+            _openai_key = os.environ.get("OPENAI_API_KEY", "")
+            if _openai_key:
+                self._use_openai_fallback = True
+                self._openai_api_key = _openai_key
+                self._openai_model = os.environ.get("OPENAI_MODEL", "gpt-4o-mini")
+                self.deployment = self._openai_model
+                logger.info("AzureYouTubeAnalyzer: Azure not configured, falling back to OpenAI %s", self._openai_model)
 
     @property
     def is_configured(self) -> bool:
-        return bool(self.api_key and self.endpoint and self.deployment)
+        return bool(
+            (self.api_key and self.endpoint and self.deployment)
+            or self._use_openai_fallback
+        )
 
     def custom_id(self, stage: str, brand_id: str, video_id: str) -> str:
         return f"{stage}:{_sha12(f'{brand_id}:{video_id}:{stage}')}:video:{video_id}"
@@ -1152,13 +1417,16 @@ class AzureYouTubeAnalyzer:
     def _ensure_client(self):
         if self._client is not None:
             return self._client
-        from openai import AzureOpenAI
-
-        self._client = AzureOpenAI(
-            api_key=self.api_key,
-            api_version=self.api_version,
-            azure_endpoint=self.endpoint,
-        )
+        if self._use_openai_fallback:
+            from openai import OpenAI
+            self._client = OpenAI(api_key=self._openai_api_key)
+        else:
+            from openai import AzureOpenAI
+            self._client = AzureOpenAI(
+                api_key=self.api_key,
+                api_version=self.api_version,
+                azure_endpoint=self.endpoint,
+            )
         return self._client
 
     def direct_call_with_meta(

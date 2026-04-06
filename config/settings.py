@@ -61,6 +61,8 @@ SUPABASE_SERVICE_KEY: str = _first_env(
 # --- LLM ---
 ANTHROPIC_API_KEY: str = os.environ.get("ANTHROPIC_API_KEY", "")
 ANTHROPIC_MODEL: str = os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-4-20250514")
+OPENAI_API_KEY: str = os.environ.get("OPENAI_API_KEY", "")
+OPENAI_MODEL: str = os.environ.get("OPENAI_MODEL", "gpt-4o-mini")
 
 # --- Telegram ---
 TELEGRAM_API_ID: str = os.environ.get("TELEGRAM_API_ID", "")

@@ -2,6 +2,8 @@
 Supabase client singleton.
 """
 
+from __future__ import annotations
+
 from supabase import create_client, Client
 from config.settings import SUPABASE_URL, SUPABASE_KEY, SUPABASE_SERVICE_KEY
 

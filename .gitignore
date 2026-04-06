@@ -55,3 +55,15 @@ logs/
 tmp/
 temp/
 *.tmp
+
+# Credentials & secrets
+.ig-cookies.json
+.instaloader-session-*
+.mcp.json
+*.cookie
+*.credentials
+brandscope/.env.local
+brandscope/.env
+
+# Claude Code
+.claude/

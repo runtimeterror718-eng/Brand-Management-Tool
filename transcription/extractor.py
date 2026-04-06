@@ -281,14 +281,15 @@ async def get_external_transcript_async(
 
 
 async def _download_youtube_audio(url: str) -> Path | None:
-    """Download audio from YouTube using yt-dlp."""
+    """Download audio from YouTube using yt-dlp with multiple fallback strategies."""
     import asyncio
     import yt_dlp
 
     tmp = tempfile.mktemp(suffix=".wav")
-    ydl_opts = {
-        "format": "bestaudio/best",
-        "outtmpl": tmp.replace(".wav", ".%(ext)s"),
+    out_template = tmp.replace(".wav", ".%(ext)s")
+
+    base_opts = {
+        "outtmpl": out_template,
         "postprocessors": [
             {
                 "key": "FFmpegExtractAudio",
@@ -297,19 +298,37 @@ async def _download_youtube_audio(url: str) -> Path | None:
             }
         ],
         "quiet": True,
+        "no_warnings": True,
     }
 
-    def _dl():
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            ydl.download([url])
+    # Strategy 1: Use browser cookies (bypasses PO token requirement)
+    strategies = [
+        {**base_opts, "format": "bestaudio/best", "cookiesfrombrowser": ("chrome",)},
+        {**base_opts, "format": "bestaudio/best", "cookiesfrombrowser": ("safari",)},
+        # Strategy 2: Force iOS client (no PO token needed)
+        {**base_opts, "format": "bestaudio/best", "extractor_args": {"youtube": {"player_client": ["ios"]}}},
+        # Strategy 3: Force Android client
+        {**base_opts, "format": "bestaudio/best", "extractor_args": {"youtube": {"player_client": ["android"]}}},
+        # Strategy 4: Plain (no cookies, no special client)
+        {**base_opts, "format": "bestaudio/best"},
+    ]
 
-    try:
-        await asyncio.get_event_loop().run_in_executor(None, _dl)
-        out_path = Path(tmp)
-        if out_path.exists():
-            return out_path
-    except Exception:
-        logger.exception("YouTube audio download failed: %s", url)
+    for i, ydl_opts in enumerate(strategies):
+        def _dl(opts=ydl_opts):
+            with yt_dlp.YoutubeDL(opts) as ydl:
+                ydl.download([url])
+
+        try:
+            await asyncio.get_event_loop().run_in_executor(None, _dl)
+            out_path = Path(tmp)
+            if out_path.exists():
+                logger.info("YouTube audio downloaded via strategy %d for %s", i + 1, url)
+                return out_path
+        except Exception:
+            if i < len(strategies) - 1:
+                logger.debug("yt-dlp strategy %d failed for %s, trying next", i + 1, url)
+            else:
+                logger.warning("All yt-dlp strategies failed for %s", url)
 
     return None
 
