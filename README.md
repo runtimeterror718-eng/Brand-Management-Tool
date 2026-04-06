@@ -11,7 +11,7 @@ OVAL is a RAG-powered brand intelligence platform that monitors mentions across 
 A parent searches "physics wallah" on Google. The first autocomplete? **"physics wallah scam."** Enrollment lost before the brand team even knew there was a problem.
 
 - **6,000+ mentions** across 5+ platforms at any given time
-- **3-person brand team** can't read them all
+- **10-person brand team** can't read them all
 - Existing tools (Brandwatch, Meltwater, Google Alerts) **can't understand Hinglish** like "paisa doob gaya" or "quality ghatiya"
 - Generic social listening shows mentions but doesn't tell you **what to do** or **which team** should handle it
 
