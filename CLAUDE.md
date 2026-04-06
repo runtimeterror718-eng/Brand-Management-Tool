@@ -14,10 +14,10 @@ make lint             # ruff check .
 make clean            # Remove __pycache__ and build artifacts
 ```
 
-### Frontend (BrandScope - Next.js)
+### Frontend (OVAL Dashboard - Next.js)
 ```bash
-cd brandscope && npm install && npm run dev   # Dev server on :3000
-cd brandscope && npm run build                # Production build
+cd oval && npm install && npm run dev   # Dev server on :3000
+cd oval && npm run build                # Production build
 ```
 
 ## Architecture
@@ -35,16 +35,16 @@ cd brandscope && npm run build                # Production build
 - **Database**: Supabase (PostgreSQL, ap-south-1)
 - **Queue**: Celery + Redis
 - **LLM**: Anthropic API (insights generation)
-- **Frontend**: Next.js 14 + TypeScript + Tailwind (in `brandscope/`)
+- **Frontend**: Next.js 14 + TypeScript + Tailwind (in `oval/`)
 
 ## Repository Structure
 ```
 alerts/              # Crisis detection, Slack/email delivery
 analysis/            # 3-tier pipeline: clean -> sentiment/cluster -> LLM insights
 brand/               # Brand config, health scores, trends, competitor analytics
-brandscope/          # Next.js 14 dashboard (TypeScript + Tailwind)
+oval/          # Next.js 14 dashboard (TypeScript + Tailwind)
 config/              # Settings, constants, Supabase client, Hinglish lexicon
-design-system/       # UI design specs (brandscope/)
+design-system/       # UI design specs (oval/)
 docs/                # All project documentation
   ├── product-spec.md         # Product vision & requirements
   ├── system-architecture.md  # Full system architecture
@@ -72,7 +72,7 @@ workers/             # Celery app, beat schedules, task orchestration
 - Follow existing patterns in each module (dataclasses in `storage/models.py`, registry pattern in `search/engine.py`)
 - Hinglish/Hindi text handling is critical — always consider `config/hinglish_lexicon.py`
 
-### Frontend (brandscope/)
+### Frontend (oval/)
 - Next.js 14 App Router with TypeScript
 - Tailwind CSS for styling
 - Supabase JS client for data access

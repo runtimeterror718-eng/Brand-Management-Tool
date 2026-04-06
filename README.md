@@ -48,7 +48,7 @@ A parent searches "physics wallah" on Google. The first autocomplete? **"physics
               +--------- Supabase -------+
                      (PostgreSQL)
                            |
-                    brandscope/
+                    oval/
                 (Next.js 14 Dashboard)
 ```
 
@@ -77,7 +77,7 @@ A parent searches "physics wallah" on Google. The first autocomplete? **"physics
 ├── alerts/              # Crisis detection, Slack/email routing
 ├── analysis/            # 3-tier AI pipeline (clean -> cluster -> insights)
 ├── brand/               # Brand config, health scores, trends, competitors
-├── brandscope/          # Next.js 14 dashboard (TypeScript + Tailwind)
+├── oval/          # Next.js 14 dashboard (TypeScript + Tailwind)
 ├── config/              # Settings, constants, Supabase client, Hinglish lexicon
 ├── design-system/       # UI design tokens
 ├── docs/                # Product spec, architecture, team ownership
@@ -109,18 +109,18 @@ A parent searches "physics wallah" on Google. The first autocomplete? **"physics
 ### 1. Install Dependencies
 ```bash
 make setup                # Install Python deps + Playwright + NLP models
-cd brandscope && npm install  # Frontend deps
+cd oval && npm install  # Frontend deps
 ```
 
 ### 2. Configure Environment
 ```bash
 cp .env.example .env                              # Application config (tuning params)
 cp secrets/.env.keys.example secrets/.env.keys     # API keys & credentials
-cp brandscope/.env.local.example brandscope/.env.local  # Frontend env vars
+cp oval/.env.local.example oval/.env.local  # Frontend env vars
 
 # Fill in your keys:
 #   secrets/.env.keys      -> Supabase, OpenAI, YouTube, Telegram, etc.
-#   brandscope/.env.local  -> NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_KEY
+#   oval/.env.local  -> NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_KEY
 ```
 
 ### 3. Start Redis
@@ -151,7 +151,7 @@ Environment is split into three files for security:
 |---|---|---|
 | `.env` | Non-secret config: tuning params, model names, service URLs | No (template: `.env.example`) |
 | `secrets/.env.keys` | All API keys, passwords, tokens | No (template: `secrets/.env.keys.example`) |
-| `brandscope/.env.local` | Frontend env vars (NEXT_PUBLIC_*) | No (template: `brandscope/.env.local.example`) |
+| `oval/.env.local` | Frontend env vars (NEXT_PUBLIC_*) | No (template: `oval/.env.local.example`) |
 
 `config/settings.py` loads `.env` first, then `secrets/.env.keys` overrides with real credentials.
 

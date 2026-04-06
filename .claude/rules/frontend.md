@@ -1,11 +1,11 @@
 ---
 paths:
-  - "brandscope/**/*.ts"
-  - "brandscope/**/*.tsx"
-  - "brandscope/**/*.css"
+  - "oval/**/*.ts"
+  - "oval/**/*.tsx"
+  - "oval/**/*.css"
 ---
 
-# Frontend Rules (BrandScope)
+# Frontend Rules (OVAL Dashboard)
 
 - Next.js 14 App Router with TypeScript — no pages/ router
 - Tailwind CSS for all styling — no CSS modules or styled-components

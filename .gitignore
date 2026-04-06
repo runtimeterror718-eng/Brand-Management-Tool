@@ -60,8 +60,8 @@ secrets/*
 !secrets/.env.keys.example
 *.cookie
 *.credentials
-brandscope/.env.local
-brandscope/.env
+oval/.env.local
+oval/.env
 
 # Claude Code
 CLAUDE.local.md

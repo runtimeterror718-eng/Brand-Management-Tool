@@ -1,10 +1,10 @@
-# Model Card: BrandScope AI System
+# Model Card: OVAL AI System
 
 ## Overview
 
 | Field | Value |
 |-------|-------|
-| System Name | BrandScope Multi-Model AI Pipeline |
+| System Name | OVAL Multi-Model AI Pipeline |
 | Version | `youtube-unofficial-mvp-v1` |
 | Developers | Abhishek Takkhi, Esha |
 | Date | April 2026 |

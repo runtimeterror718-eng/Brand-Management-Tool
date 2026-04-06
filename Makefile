@@ -6,8 +6,8 @@ setup: install setup-models
 	@echo "Setup complete. Next steps:"
 	@echo "  1. cp .env.example .env"
 	@echo "  2. cp secrets/.env.keys.example secrets/.env.keys"
-	@echo "  3. cp brandscope/.env.local.example brandscope/.env.local"
-	@echo "  4. Fill in your API keys in secrets/.env.keys and brandscope/.env.local"
+	@echo "  3. cp oval/.env.local.example oval/.env.local"
+	@echo "  4. Fill in your API keys in secrets/.env.keys and oval/.env.local"
 	@echo "  5. Start Redis: redis-server"
 	@echo "  6. make worker  (in one terminal)"
 	@echo "  7. make beat    (in another terminal)"
@@ -31,9 +31,9 @@ worker:
 beat:
 	celery -A workers.celery_app beat --loglevel=info
 
-# Run Next.js frontend (BrandScope on localhost:3000)
+# Run Next.js frontend (OVAL dashboard on localhost:3000)
 frontend:
-	cd brandscope && npm install && npm run dev
+	cd oval && npm install && npm run dev
 
 # Run tests
 test:

@@ -5,7 +5,7 @@
 > **Last Updated**: 2026-04-03
 > **Platforms Covered**: Instagram, Reddit, Google Search/Trends/News
 > **Data Store**: Supabase (PostgreSQL + pgvector)
-> **Dashboard**: Next.js 14 (brandscope/)
+> **Dashboard**: Next.js 14 (oval/)
 
 ---
 
@@ -588,7 +588,7 @@ State: Rajasthan (RJ)
 
 ## 10. RAG System
 
-**Files**: `brandscope/src/lib/rag.ts` (frontend), `analysis/rag.py` (backend)
+**Files**: `oval/src/lib/rag.ts` (frontend), `analysis/rag.py` (backend)
 
 ### What Is RAG?
 
@@ -729,7 +729,7 @@ Volume bonus capped at 15 (more data = more confidence)
 
 ## 12. Actionables Engine
 
-**File**: `brandscope/src/app/api/actionables/route.ts`
+**File**: `oval/src/app/api/actionables/route.ts`
 
 ### How Action Items Are Generated
 
@@ -795,7 +795,7 @@ Each actionable shows (expandable "RAG Details" panel):
 
 ## 13. Competitor Intelligence
 
-**File**: `brandscope/src/app/api/competitors/route.ts`
+**File**: `oval/src/app/api/competitors/route.ts`
 
 ### Competitors Tracked
 ```
@@ -1028,12 +1028,12 @@ upselling, notification, popup, spam, marketing, ads
 | `workers/schedule.py` | Celery beat schedule |
 | `scripts/embed_openai.py` | OpenAI re-embedding script |
 | `scripts/classify_sentiment.py` | GPT-4o-mini sentiment classification |
-| `brandscope/src/lib/rag.ts` | Frontend RAG utility (embed, search, rerank, generate) |
-| `brandscope/src/app/api/overview/route.ts` | Overview dashboard API |
-| `brandscope/src/app/api/reddit/route.ts` | Reddit intelligence API |
-| `brandscope/src/app/api/instagram/route.ts` | Instagram intelligence API |
-| `brandscope/src/app/api/google/route.ts` | Google intelligence API |
-| `brandscope/src/app/api/competitors/route.ts` | Competitor analysis API |
-| `brandscope/src/app/api/actionables/route.ts` | RAG-powered action items API |
-| `brandscope/src/app/api/ask/route.ts` | Ask OVAL chat endpoint |
+| `oval/src/lib/rag.ts` | Frontend RAG utility (embed, search, rerank, generate) |
+| `oval/src/app/api/overview/route.ts` | Overview dashboard API |
+| `oval/src/app/api/reddit/route.ts` | Reddit intelligence API |
+| `oval/src/app/api/instagram/route.ts` | Instagram intelligence API |
+| `oval/src/app/api/google/route.ts` | Google intelligence API |
+| `oval/src/app/api/competitors/route.ts` | Competitor analysis API |
+| `oval/src/app/api/actionables/route.ts` | RAG-powered action items API |
+| `oval/src/app/api/ask/route.ts` | Ask OVAL chat endpoint |
 | `schema.sql` | Full Supabase schema (24+ tables) |

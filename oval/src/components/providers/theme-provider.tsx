@@ -24,7 +24,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     setMounted(true);
-    const stored = localStorage.getItem("brandscope-theme") as Theme | null;
+    const stored = localStorage.getItem("oval-theme") as Theme | null;
     if (stored === "dark" || stored === "light") {
       setTheme(stored);
     } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
@@ -40,7 +40,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     } else {
       root.classList.remove("dark");
     }
-    localStorage.setItem("brandscope-theme", theme);
+    localStorage.setItem("oval-theme", theme);
   }, [theme, mounted]);
 
   const toggleTheme = useCallback(() => {
