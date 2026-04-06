@@ -89,7 +89,6 @@ export default function NeuralMapPage() {
           <div className="flex items-center gap-3">
             <Network className="w-5 h-5 text-purple-500" />
             <h1 className="text-2xl font-bold tracking-tight">Neural Map</h1>
-            {isLive && <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">Live</span>}
           </div>
           <p className="text-sm text-muted-foreground mt-0.5">
             {stats.totalNodes || 0} entities and {stats.totalLinks || 0} connections — PW&apos;s brand intelligence network

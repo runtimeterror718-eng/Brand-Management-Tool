@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, BarChart, Bar, Cell } from "recharts";
-import { Search, Globe, ExternalLink } from "lucide-react";
+import { Search, Globe, ExternalLink, AlertTriangle, TrendingUp, Newspaper, Eye } from "lucide-react";
 import { useLiveData } from "@/lib/use-live-data";
 import { formatNumber, cn } from "@/lib/utils";
 import { AnimatedChart, AnimatedNumber } from "@/components/ui/animated-chart";
@@ -31,7 +31,6 @@ export default function GooglePage() {
     <motion.div className="max-w-6xl mx-auto px-4 py-6 space-y-6" variants={stagger} initial="hidden" animate="show">
       <motion.div variants={fadeUp}>
         <div className="flex items-center gap-3"><Globe className="w-5 h-5 text-[#4285F4]" /><h1 className="text-2xl font-bold tracking-tight">Google Intelligence</h1>
-          {isLive && <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">Live</span>}
         </div><p className="text-sm text-muted-foreground mt-0.5">What Google shows when someone searches for your brand</p>
       </motion.div>
 
@@ -53,6 +52,78 @@ export default function GooglePage() {
             ))}</div>
           </div>
         </AnimatedChart>
+      )}
+
+      {/* Insight Cards */}
+      {isLive && (
+        <motion.div variants={fadeUp} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div className="rounded-xl border border-border bg-card p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="w-7 h-7 rounded-lg flex items-center justify-center bg-blue-100 dark:bg-blue-900/30"><Search className="w-3.5 h-3.5 text-blue-600" /></span>
+              <h4 className="text-xs font-bold">Autocomplete Audit</h4>
+            </div>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              {stats.totalAutocomplete || 0} suggestions scanned (including full a-z alphabet expansion).
+              {negCount > 0 ? ` ${negCount} suggestions are negative — including "scam", "fraud", "refund". These appear to every parent searching for PW.` : " No negative suggestions detected."}
+              {` ${stats.warningAutocomplete || 0} warning-level suggestions ("review", "comparison", "alternative").`}
+            </p>
+          </div>
+
+          <div className="rounded-xl border border-red-200 dark:border-red-800/40 bg-red-50/20 dark:bg-red-950/10 p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="w-7 h-7 rounded-lg flex items-center justify-center bg-red-200 dark:bg-red-900/50"><AlertTriangle className="w-3.5 h-3.5 text-red-700" /></span>
+              <h4 className="text-xs font-bold text-red-700 dark:text-red-400">Enrollment Risk</h4>
+            </div>
+            <p className="text-xs text-red-700/80 dark:text-red-400/80 leading-relaxed">
+              Google autocomplete is PW's front door. When a parent types "physics wallah" and sees "scam" as the first suggestion, they never visit your website. This directly impacts enrollment.
+              {negCount > 0 ? ` Currently ${Math.round((negCount / Math.max(stats.totalAutocomplete || 1, 1)) * 100)}% of suggestions carry negative sentiment.` : ""}
+            </p>
+          </div>
+
+          <div className="rounded-xl border border-border bg-card p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="w-7 h-7 rounded-lg flex items-center justify-center bg-green-100 dark:bg-green-900/30"><TrendingUp className="w-3.5 h-3.5 text-green-600" /></span>
+              <h4 className="text-xs font-bold">Trends vs Competitors</h4>
+            </div>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              {stats.trendsDataPoints || 0} data points across 90 days. Tracking PW against Allen, Unacademy, and BYJU's.
+              {stats.trendsRegions ? ` Search interest mapped across ${stats.trendsRegions} Indian regions — reveals where PW is strong and where competitors dominate.` : ""}
+            </p>
+          </div>
+
+          <div className="rounded-xl border border-border bg-card p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="w-7 h-7 rounded-lg flex items-center justify-center bg-purple-100 dark:bg-purple-900/30"><Eye className="w-3.5 h-3.5 text-purple-600" /></span>
+              <h4 className="text-xs font-bold">SERP Position</h4>
+            </div>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              {stats.serpQueries || 0} queries tracked across brand, risk, and competitor searches.
+              {stats.serpResults ? ` ${stats.serpResults} organic results captured. ` : " "}
+              When a consumer court article ranks #3 for "physics wallah" — that's a crisis. OVAL tracks what Google shows for every key query.
+            </p>
+          </div>
+
+          <div className="rounded-xl border border-border bg-card p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="w-7 h-7 rounded-lg flex items-center justify-center bg-amber-100 dark:bg-amber-900/30"><Newspaper className="w-3.5 h-3.5 text-amber-600" /></span>
+              <h4 className="text-xs font-bold">News Radar</h4>
+            </div>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              {stats.newsArticles || 0} news articles tracked from Google News RSS.
+              Monitoring "Physics Wallah", "Alakh Pandey", "PW IPO", and "edtech scam India". Negative articles from publications like LawChakra, DNA, or Economic Times need immediate PR response.
+            </p>
+          </div>
+
+          <div className="rounded-xl border border-amber-200 dark:border-amber-800/40 bg-amber-50/30 dark:bg-amber-950/10 p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="w-7 h-7 rounded-lg flex items-center justify-center bg-amber-200 dark:bg-amber-900/50"><Globe className="w-3.5 h-3.5 text-amber-700" /></span>
+              <h4 className="text-xs font-bold text-amber-700 dark:text-amber-400">Why Google Matters Most</h4>
+            </div>
+            <p className="text-xs text-amber-700/80 dark:text-amber-400/80 leading-relaxed">
+              Google is the last touchpoint before enrollment. Reddit creates narratives, Instagram amplifies them, but Google is where parents make the decision. If autocomplete shows "scam" — game over. OVAL monitors this in real-time.
+            </p>
+          </div>
+        </motion.div>
       )}
 
       {negativeSuggestions?.length > 0 && (

@@ -1,7 +1,7 @@
 """
 LinkedIn scraper — Proxycurl API recommended.
 
-Owner: Esha (TBD)
+Owner: Team B (TBD)
 Risk: LinkedIn sends legal letters for direct scraping.
 """
 

@@ -80,7 +80,8 @@ Be data-grounded — cite real comments/titles.`,
   }));
 
   // Video list
-  const videoList = videos.slice(0, 12).map(v => ({
+  const videoList = videos.slice(0, 50).map(v => ({
+    videoId: v.video_id,
     title: v.video_title,
     views: v.video_views,
     likes: v.video_likes,
@@ -116,6 +117,7 @@ Be data-grounded — cite real comments/titles.`,
     channels: channelList,
     videos: videoList,
     prRiskVideos: prRiskVideos.slice(0, 5).map(v => ({
+      videoId: v.video_id,
       title: v.video_title,
       views: v.video_views,
       reason: v.title_triage_reason,

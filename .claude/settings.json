@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(make:*)",
+      "Bash(npm run:*)",
+      "Bash(npm install:*)",
+      "Bash(python3 -c:*)",
+      "Bash(python3 -m pytest:*)",
+      "Bash(ruff:*)",
+      "Bash(celery:*)",
+      "mcp__supabase__execute_sql",
+      "mcp__supabase__apply_migration",
+      "mcp__supabase__list_tables",
+      "mcp__supabase__list_migrations",
+      "mcp__supabase__get_logs"
+    ],
+    "deny": [
+      "Bash(rm -rf /)",
+      "Bash(git push --force)"
+    ]
+  },
+  "env": {
+    "PROJECT_NAME": "OVAL",
+    "SUPABASE_PROJECT_REF": "bieocyzyybjetzornlfw"
+  }
+}

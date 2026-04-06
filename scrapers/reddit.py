@@ -1,7 +1,7 @@
 """
 Reddit scraper — no-auth JSON API for negative PR detection.
 
-Owner: Abhishek
+Owner: Team A
 
 Pipeline:
   1. Search targeted subreddits for PW mentions via Reddit's public JSON API

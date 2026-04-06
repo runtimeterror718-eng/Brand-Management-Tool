@@ -1,7 +1,7 @@
 """
 Facebook scraper — Meta Graph API or Playwright fallback.
 
-Owner: Esha (TBD)
+Owner: Team B (TBD)
 """
 
 from __future__ import annotations

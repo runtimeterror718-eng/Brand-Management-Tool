@@ -8,8 +8,11 @@ from dotenv import load_dotenv
 
 _project_root = Path(__file__).resolve().parent.parent
 
-# Load .env first, then let .env.local override for machine-local secrets.
+# Layer 1: Application config (tuning params, service URLs, defaults)
 load_dotenv(_project_root / ".env")
+# Layer 2: Secrets (API keys, credentials) — always overrides config
+load_dotenv(_project_root / "secrets" / ".env.keys", override=True)
+# Layer 3: Legacy .env.local support (if still present)
 load_dotenv(_project_root / ".env.local", override=True)
 
 

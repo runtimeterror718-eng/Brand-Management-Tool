@@ -1,7 +1,7 @@
 """
 Telegram scraper — discovery, channel classification, and incremental monitoring.
 
-Owner: Esha
+Owner: Team B
 Libraries: Telethon (MTProto)
 """
 

@@ -1,9 +1,9 @@
 """
-YouTube 3-Month Backfill using Esha's full pipeline.
+YouTube 3-Month Backfill using Team B's full pipeline.
 
 Key optimization: Instead of 250+ individual search queries (25K units),
 we pass pre-grouped OR queries (15 queries, ~2K units) via query_buckets_override.
-Esha's pipeline handles everything else: triage, transcripts, comments, sentiment, storage.
+Team B's pipeline handles everything else: triage, transcripts, comments, sentiment, storage.
 
 Usage:
     python scripts/youtube_backfill.py
@@ -102,7 +102,7 @@ async def run_backfill():
     logger.info(f"LLM: {'Azure OpenAI' if AZURE_OPENAI_API_KEY else 'OpenAI GPT-4o-mini' if OPENAI_API_KEY else 'NONE'}")
 
     logger.info("=" * 60)
-    logger.info("Starting YouTube backfill with Esha's full pipeline...")
+    logger.info("Starting YouTube backfill with Team B's full pipeline...")
     logger.info(f"  Query groups: {total_queries}")
     logger.info(f"  Published after: 90 days")
     logger.info(f"  Max comments per video: 10,000")
@@ -150,7 +150,7 @@ async def run_backfill():
 
 
 if __name__ == "__main__":
-    print("YouTube Backfill — Esha's Full Pipeline + Smart Grouped Queries")
+    print("YouTube Backfill — Team B's Full Pipeline + Smart Grouped Queries")
     total = sum(len(v) for v in GROUPED_QUERIES.values())
     print(f"  {total} grouped queries → ~{total * 100} units (vs 25,000+ old approach)")
     print(f"  Pipeline: discover → title triage → transcripts → comments → sentiment → final synthesis")

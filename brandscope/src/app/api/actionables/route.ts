@@ -10,59 +10,61 @@ import {
 // RAG probes — PW-specific natural language queries for negative-only search
 // ---------------------------------------------------------------------------
 const RAG_PROBES = [
-  // Product Team
-  { id: "teacher-quality", department: "Product Team", area: "Teacher & Content Quality",
-    query: "PW teacher left mid batch quality dropped faculty bad replaced PW Skills course poor content",
-    keywords: ["teacher", "faculty", "quality", "batch", "replaced", "teaching", "skills"] },
-  { id: "content-freshness", department: "Product Team", area: "Content Freshness & Recycled Material",
-    query: "PW recycled old lectures reused PDF notes outdated previous year batch same material stale content",
-    keywords: ["recycled", "old", "reused", "outdated", "previous year", "stale"] },
-  // Finance Team
-  { id: "ipo-business", department: "Finance Team", area: "IPO & Business Perception",
-    query: "PW IPO overvalued stock billionaire Alakh Pandey crore valuation investors money business criticism",
-    keywords: ["IPO", "stock", "valuation", "billionaire", "crore", "business"] },
+  // 1. Product Team — feature requests, feature queries, app/web frontend/backend issues ONLY
+  { id: "app-issues", department: "Product Team", area: "App & Web Issues",
+    query: "Physics Wallah app crash bug buffering live class not working glitch error slow loading feature request UI broken",
+    keywords: ["app", "crash", "bug", "buffering", "glitch", "slow", "error", "feature", "UI", "loading"] },
+  { id: "feature-request", department: "Product Team", area: "Feature Requests & Product Feedback",
+    query: "PW app feature missing update needed improvement suggestion dark mode download offline video quality player",
+    keywords: ["feature", "update", "improvement", "suggestion", "download", "offline", "player"] },
+  // 2. Finance Team — IPO, stocks, P&L, refunds, financial performance
+  { id: "ipo-business", department: "Finance Team", area: "IPO & Financial Performance",
+    query: "PW IPO overvalued stock billionaire Alakh Pandey crore valuation investors money business profit loss",
+    keywords: ["IPO", "stock", "valuation", "billionaire", "crore", "profit", "loss"] },
   { id: "refund", department: "Finance Team", area: "Refund & Cancellation Policy",
     query: "Physics Wallah refund delayed cancellation fees too high money not returned course subscription",
     keywords: ["refund", "cancel", "payment", "money", "delayed", "return", "fees"] },
-  // Legal Team
-  { id: "consumer-court", department: "Legal Team", area: "Consumer Court & Legal Complaints",
-    query: "Physics Wallah consumer court complaint legal case compensation penalty FIR deficiency service",
-    keywords: ["consumer court", "legal", "complaint", "FIR", "compensation", "penalty"] },
-  // HR Team
-  { id: "employer-brand", department: "HR Team", area: "Employer Brand & Hiring Perception",
-    query: "Physics Wallah sell pen interview toxic work culture low salary bad employer hiring experience glassdoor",
-    keywords: ["interview", "hiring", "salary", "job", "pen", "toxic", "employer", "glassdoor"] },
-  // Batch Operations Team
-  { id: "batch-ops", department: "Batch Operations Team", area: "Batch Quality & Student Experience",
-    query: "PW arjuna lakshya batch experience schedule doubt support DPP test series module delivery",
-    keywords: ["batch", "arjuna", "lakshya", "schedule", "doubt", "DPP", "test series", "module"] },
-  // YouTube Team
+  // 3. Legal Team — consumer court, lawsuits, legal action
+  { id: "consumer-court", department: "Legal Team", area: "Legal Complaints & Lawsuits",
+    query: "Physics Wallah consumer court complaint legal case compensation penalty FIR lawsuit sue deficiency service",
+    keywords: ["consumer court", "legal", "complaint", "FIR", "compensation", "lawsuit", "sue"] },
+  // 4. HR Team — hiring employees, teachers, staff wellbeing, recruitment
+  { id: "employer-brand", department: "HR Team", area: "Hiring & Employee Wellbeing",
+    query: "Physics Wallah sell pen interview toxic work culture low salary bad employer hiring experience glassdoor recruitment attrition",
+    keywords: ["interview", "hiring", "salary", "job", "pen", "toxic", "employer", "glassdoor", "attrition"] },
+  // 5. Batch Operations Team — teachers, batches, content, DPPs, test series, faculty
+  { id: "teacher-quality", department: "Batch Operations Team", area: "Teacher Quality & Faculty Issues",
+    query: "PW teacher left mid batch quality dropped faculty bad replaced teaching poor lecture sir mam resigned",
+    keywords: ["teacher", "faculty", "quality", "replaced", "teaching", "sir", "mam", "resigned", "left"] },
+  { id: "content-freshness", department: "Batch Operations Team", area: "Content Freshness & Study Material",
+    query: "PW recycled old lectures reused PDF notes outdated previous year batch same material stale content DPP module",
+    keywords: ["recycled", "old", "reused", "outdated", "previous year", "stale", "DPP", "module", "notes"] },
+  { id: "batch-ops", department: "Batch Operations Team", area: "Batch Scheduling & Student Experience",
+    query: "PW arjuna lakshya batch experience schedule doubt support test series delivery feedback late started delayed",
+    keywords: ["batch", "arjuna", "lakshya", "schedule", "doubt", "test series", "feedback", "delayed"] },
+  // 6. YouTube Team — YouTube content and everything related
   { id: "youtube-content", department: "YouTube Team", area: "YouTube Content & PR Risk",
-    query: "Physics Wallah YouTube video negative controversy exposed student suicide PR risk criticism",
-    keywords: ["youtube", "video", "exposed", "controversy", "PR risk", "criticism"] },
-  // PR Team
+    query: "Physics Wallah YouTube video negative controversy exposed student suicide PR risk criticism channel content creator",
+    keywords: ["youtube", "video", "exposed", "controversy", "PR risk", "criticism", "channel", "creator"] },
+  // 7. PR Team — scam narratives, negative narration, brand value harm
   { id: "scam-trust", department: "PR Team", area: "Scam & Trust Narrative",
-    query: "PW scam fraud like BYJU edtech company looting students money waste commercialized broken promises",
-    keywords: ["scam", "fraud", "BYJU", "loot", "waste", "commercialized"] },
+    query: "PW scam fraud like BYJU edtech company looting students money waste commercialized broken promises brand reputation",
+    keywords: ["scam", "fraud", "BYJU", "loot", "waste", "commercialized", "reputation"] },
   { id: "political", department: "PR Team", area: "Political & Sensitive Content",
-    query: "Physics Wallah reservation caste political controversy religion communal sensitive debate",
-    keywords: ["reservation", "caste", "political", "controversy", "religion"] },
-  // Vidyapeeth Operations Team
-  { id: "vidyapeeth", department: "Vidyapeeth Operations Team", area: "Offline Centre Experience",
-    query: "PW Vidyapeeth offline centre experience infrastructure faculty quality hostel food Kota Jaipur Delhi complaint",
-    keywords: ["vidyapeeth", "offline", "centre", "infrastructure", "hostel", "kota"] },
-  // Engineering Team
-  { id: "app-issues", department: "Engineering Team", area: "App Stability & Tech Issues",
-    query: "Physics Wallah app crash bug buffering live class not working glitch error slow loading",
-    keywords: ["app", "crash", "bug", "buffering", "glitch", "slow", "error"] },
-  // Marketing Team
-  { id: "marketing", department: "Marketing Team", area: "Aggressive Marketing & Upselling",
-    query: "PW aggressive upselling notifications popup spam marketing push ads course upgrade pressure",
-    keywords: ["upselling", "notification", "popup", "spam", "marketing", "ads"] },
-  // Customer Support Team
-  { id: "support", department: "Customer Support Team", area: "Support Response & Resolution",
-    query: "Physics Wallah customer support no response ticket ignored chatbot useless complaint unresolved help",
-    keywords: ["support", "response", "ticket", "ignored", "chatbot", "complaint"] },
+    query: "Physics Wallah reservation caste political controversy religion communal sensitive debate public image brand value",
+    keywords: ["reservation", "caste", "political", "controversy", "religion", "brand"] },
+  // 8. Vidyapeeth Operations Team — offline centres, centre teachers, infrastructure, operations
+  { id: "vidyapeeth", department: "Vidyapeeth Operations Team", area: "Offline Centre Operations & Feedback",
+    query: "PW Vidyapeeth offline centre experience infrastructure faculty quality hostel food Kota Jaipur Delhi teacher operations campus",
+    keywords: ["vidyapeeth", "offline", "centre", "infrastructure", "hostel", "kota", "campus", "operations"] },
+  // 9. Marketing Team — student notifications, drip campaigns, Google Ads, promotions
+  { id: "marketing", department: "Marketing Team", area: "Student Marketing & Campaigns",
+    query: "PW aggressive upselling notifications popup spam marketing push ads course upgrade pressure drip campaign Google Ads promotion",
+    keywords: ["upselling", "notification", "popup", "spam", "marketing", "ads", "campaign", "promotion"] },
+  // 10. Customer Support Team — all support queries, tickets, resolution
+  { id: "support", department: "Customer Support Team", area: "Support Queries & Resolution",
+    query: "Physics Wallah customer support no response ticket ignored chatbot useless complaint unresolved help query order delivery",
+    keywords: ["support", "response", "ticket", "ignored", "chatbot", "complaint", "order", "delivery"] },
 ];
 
 type Priority = "high" | "medium" | "low";
@@ -165,11 +167,33 @@ export async function GET() {
         task_description: task.task_description,
         suggested_actions: task.suggested_actions || [],
         mention_count: mentions.length,
-        evidence: mentions.slice(0, 5).map((m) => ({
-          text: (m.content_text || "").slice(0, 250),
-          platform: m.platform || "unknown",
-          sentiment: m.sentiment_label || "negative",
-          similarity: Math.round((m.similarity || 0) * 1000) / 1000,
+        evidence: await Promise.all(mentions.slice(0, 5).map(async (m) => {
+          // Try to find source URL from mention_embeddings or platform tables
+          let sourceUrl = "";
+          try {
+            const sb = getSupabase();
+            if (m.platform === "reddit") {
+              const { data } = await sb.from("reddit_posts").select("post_url").textSearch("post_title", (m.content_text || "").slice(0, 50).replace(/[^a-zA-Z0-9 ]/g, " "), { type: "plain" }).limit(1);
+              sourceUrl = data?.[0]?.post_url || "";
+            } else if (m.platform === "instagram") {
+              const { data } = await sb.from("instagram_posts").select("post_url").textSearch("caption_text", (m.content_text || "").slice(0, 50).replace(/[^a-zA-Z0-9 ]/g, " "), { type: "plain" }).limit(1);
+              sourceUrl = data?.[0]?.post_url || "";
+            } else if (m.platform === "youtube") {
+              const { data } = await sb.from("youtube_videos").select("source_url").textSearch("video_title", (m.content_text || "").slice(0, 50).replace(/[^a-zA-Z0-9 ]/g, " "), { type: "plain" }).limit(1);
+              sourceUrl = data?.[0]?.source_url || "";
+            } else if (m.platform === "telegram") {
+              sourceUrl = ""; // Telegram messages don't have public URLs
+            }
+          } catch { /* URL lookup failed, continue without it */ }
+
+          return {
+            text: m.content_text || "",
+            platform: m.platform || "unknown",
+            sentiment: m.sentiment_label || "negative",
+            similarity: Math.round((m.similarity || 0) * 1000) / 1000,
+            source_url: sourceUrl,
+            author: "",
+          };
         })),
         rag: {
           probe_query: probe.query,

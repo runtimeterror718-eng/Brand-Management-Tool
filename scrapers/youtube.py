@@ -1,7 +1,7 @@
 """
 YouTube unofficial pipeline: discovery, triage, enrichment, persistence.
 
-Owner: Esha
+Owner: Team B
 """
 
 from __future__ import annotations

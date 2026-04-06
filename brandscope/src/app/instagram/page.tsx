@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
-import { Camera, Heart, MessageCircle as Msg, Play, Search, ExternalLink } from "lucide-react";
+import { Camera, Heart, MessageCircle as Msg, Play, Search, ExternalLink, AlertTriangle } from "lucide-react";
 import RAGInsight from "@/components/dashboard/rag-insight";
 import { useLiveData } from "@/lib/use-live-data";
 import { formatNumber, cn } from "@/lib/utils";
@@ -48,9 +48,7 @@ export default function InstagramPage() {
         <div className="flex items-center gap-3">
           <Camera className="w-5 h-5" style={{ color: PINK }} />
           <h1 className="text-2xl font-bold tracking-tight">Instagram Intelligence</h1>
-          {isLive && <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">Live — {stats.totalPosts} posts</span>}
         </div>
-        <p className="text-sm text-muted-foreground mt-0.5">The curated surface of brand perception</p>
       </motion.div>
 
       <motion.div variants={fadeUp} className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
@@ -117,45 +115,201 @@ export default function InstagramPage() {
         </div>
       )}
 
-      {topPosts.length > 0 && (
+      {/* Overview Insight Cards */}
+      {isLive && (
+        <motion.div variants={fadeUp} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          {/* Brand Health */}
+          <div className="rounded-xl border border-border bg-card p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ backgroundColor: `${PINK}15` }}>
+                <Camera className="w-3.5 h-3.5" style={{ color: PINK }} />
+              </span>
+              <h4 className="text-xs font-bold">Brand Health</h4>
+            </div>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              {embTotal > 0 && (sentiment.positive || 0) > (sentiment.negative || 0)
+                ? `Instagram is PW's safest platform with ${Math.round(((sentiment.positive || 0) / embTotal) * 100)}% positive sentiment. Fan content and student motivation reels drive engagement.`
+                : `Sentiment is balanced. Monitor for emerging negative trends in comments.`}
+            </p>
+            <div className="flex gap-2 mt-2">
+              <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-green-100 text-green-700">{sentiment.positive || 0} positive</span>
+              <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-red-100 text-red-700">{sentiment.negative || 0} negative</span>
+            </div>
+          </div>
+
+          {/* Engagement */}
+          <div className="rounded-xl border border-border bg-card p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="w-7 h-7 rounded-lg flex items-center justify-center bg-purple-100 dark:bg-purple-900/30">
+                <Heart className="w-3.5 h-3.5 text-purple-600" />
+              </span>
+              <h4 className="text-xs font-bold">Engagement</h4>
+            </div>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              {formatNumber(stats.totalLikes || 0)} total likes across {stats.totalPosts || 0} posts.
+              {(stats.totalReelPlays || 0) > 0 ? ` Reels dominate with ${formatNumber(stats.totalReelPlays)} plays — short-form video is the primary engagement driver.` : ""}
+              {accounts.length > 0 ? ` Top performer: @${accounts[0]?.name} with ${formatNumber(accounts[0]?.totalLikes || 0)} likes.` : ""}
+            </p>
+          </div>
+
+          {/* Comment Insights */}
+          <div className="rounded-xl border border-border bg-card p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="w-7 h-7 rounded-lg flex items-center justify-center bg-amber-100 dark:bg-amber-900/30">
+                <Msg className="w-3.5 h-3.5 text-amber-600" />
+              </span>
+              <h4 className="text-xs font-bold">Comment Signals</h4>
+            </div>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              {stats.storedComments
+                ? `${formatNumber(stats.storedComments)} comments captured. Unlike curated captions, comments reveal real student sentiment — refund frustrations, teacher feedback, and app complaints surface here first.`
+                : "No comment data available yet."}
+            </p>
+          </div>
+
+          {/* Content Mix */}
+          <div className="rounded-xl border border-border bg-card p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="w-7 h-7 rounded-lg flex items-center justify-center bg-blue-100 dark:bg-blue-900/30">
+                <Play className="w-3.5 h-3.5 text-blue-600" />
+              </span>
+              <h4 className="text-xs font-bold">Content Mix</h4>
+            </div>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              {Object.entries(mediaTypes).length > 0
+                ? Object.entries(mediaTypes).map(([type, count]) => `${count} ${type}s`).join(", ") + `. ${stats.totalHashtags || 0} unique hashtags tracked across all posts.`
+                : "No content type data."}
+            </p>
+          </div>
+
+          {/* Accounts Monitored */}
+          <div className="rounded-xl border border-border bg-card p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="w-7 h-7 rounded-lg flex items-center justify-center bg-green-100 dark:bg-green-900/30">
+                <Search className="w-3.5 h-3.5 text-green-600" />
+              </span>
+              <h4 className="text-xs font-bold">Monitoring Scope</h4>
+            </div>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              {accounts.length > 0
+                ? `Tracking ${accounts.length} accounts: PW official, ${accounts.filter((a: any) => a.name !== "physicswallah").length} external (competitors, ex-PW teachers, fan pages, student influencers). 15 hashtag feeds monitored.`
+                : "No accounts tracked."}
+            </p>
+          </div>
+
+          {/* Key Warning */}
+          <div className="rounded-xl border border-amber-200 dark:border-amber-800/40 bg-amber-50/30 dark:bg-amber-950/10 p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="w-7 h-7 rounded-lg flex items-center justify-center bg-amber-200 dark:bg-amber-900/50">
+                <AlertTriangle className="w-3.5 h-3.5 text-amber-700" />
+              </span>
+              <h4 className="text-xs font-bold text-amber-700 dark:text-amber-400">Watch Out</h4>
+            </div>
+            <p className="text-xs text-amber-700/80 dark:text-amber-400/80 leading-relaxed">
+              Instagram sentiment looks positive, but this is the curated surface. The real complaints live in Reel audio and comment threads — not in captions. Cross-reference with Reddit for the full picture.
+            </p>
+          </div>
+        </motion.div>
+      )}
+
+      {/* RAG Analysis */}
+      {isLive && live?.rag?.enabled && (
         <motion.div variants={fadeUp}>
-          <h2 className="text-sm font-semibold mb-3">Top Posts ({topPosts.length})</h2>
-          <div className="space-y-2 max-h-[400px] overflow-y-auto">
-            {topPosts.map((post: any, i: number) => (
-              <div key={i} className="rounded-xl border border-border bg-card p-3.5 hover:shadow-md transition-shadow">
-                <div className="flex items-start justify-between mb-1.5">
-                  <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-medium px-1.5 py-0.5 rounded" style={{ backgroundColor: `${PINK}15`, color: PINK }}>{post.mediaType}</span>
-                    <span className="text-xs text-muted-foreground">@{post.account}</span>
+          <RAGInsight title="Instagram Analysis" analysis={live.rag.analysis} confidence={live.rag.confidence} mentionsUsed={live.rag.mentionsUsed} avgSimilarity={live.rag.avgSimilarity} sentimentBreakdown={live.rag.sentimentBreakdown} />
+        </motion.div>
+      )}
+
+      {/* Monitored Accounts */}
+      {accounts.length > 0 && (
+        <motion.div variants={fadeUp}>
+          <h2 className="text-sm font-bold mb-3">Monitored Accounts ({accounts.length})</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {accounts.map((acc: any, i: number) => (
+              <div key={i} className="rounded-xl border border-border bg-card p-4 hover:shadow-md transition-shadow">
+                <div className="flex items-start justify-between mb-2">
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-sm font-bold" style={{ color: PINK }}>@{acc.name}</span>
+                      {acc.isOfficial && <span className="text-[9px] font-medium px-1.5 py-0.5 rounded bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">official</span>}
+                      {!acc.isOfficial && <span className="text-[9px] font-medium px-1.5 py-0.5 rounded bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">external</span>}
+                    </div>
+                    <p className="text-xs text-muted-foreground">{acc.bio || acc.category || "Instagram account"}</p>
                   </div>
-                  <div className="flex gap-3 text-[10px] text-muted-foreground">
-                    <span className="flex items-center gap-0.5"><Heart className="w-3 h-3" />{formatNumber(post.likes)}</span>
-                    <span className="flex items-center gap-0.5"><Msg className="w-3 h-3" />{post.comments}</span>
-                    {post.reelPlays > 0 && <span className="flex items-center gap-0.5"><Play className="w-3 h-3" />{formatNumber(post.reelPlays)}</span>}
+                  <div className="text-right shrink-0">
+                    <p className="text-base font-bold">{formatNumber(acc.followers || acc.totalLikes || 0)}</p>
+                    <p className="text-[10px] text-muted-foreground">{acc.followers ? "followers" : "total likes"}</p>
                   </div>
                 </div>
-                <p className="text-sm line-clamp-2">{post.caption || "(no caption)"}</p>
-                {post.url && <a href={post.url} target="_blank" rel="noopener noreferrer" className="text-[10px] text-pink-600 hover:underline mt-1 inline-flex items-center gap-0.5 cursor-pointer">View <ExternalLink className="w-2.5 h-2.5" /></a>}
+                <div className="flex items-center gap-3 text-[10px] text-muted-foreground">
+                  <span>{acc.posts || 0} posts tracked</span>
+                  {acc.totalLikes > 0 && <span>{formatNumber(acc.totalLikes)} likes</span>}
+                  {acc.totalComments > 0 && <span>{formatNumber(acc.totalComments)} comments</span>}
+                </div>
               </div>
             ))}
           </div>
         </motion.div>
       )}
 
+      {/* Top Posts */}
+      {topPosts.length > 0 && (
+        <motion.div variants={fadeUp}>
+          <h2 className="text-sm font-bold mb-3">Top Posts ({topPosts.length})</h2>
+          <div className="space-y-2.5 max-h-[500px] overflow-y-auto pr-1">
+            {topPosts.map((post: any, i: number) => (
+              <div key={i} className="rounded-xl border border-border bg-card p-4 hover:shadow-md transition-shadow">
+                <div className="flex items-start gap-4">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <span className="text-[9px] font-medium px-1.5 py-0.5 rounded" style={{ backgroundColor: `${PINK}15`, color: PINK }}>{post.mediaType}</span>
+                      <span className="text-xs font-medium text-muted-foreground">@{post.account}</span>
+                    </div>
+                    <p className="text-sm font-semibold line-clamp-2 leading-snug">{post.caption || "(no caption)"}</p>
+                    <div className="flex items-center gap-3 mt-2 text-[10px] text-muted-foreground">
+                      <span className="flex items-center gap-1"><Heart className="w-3 h-3" />{formatNumber(post.likes)}</span>
+                      <span className="flex items-center gap-1"><Msg className="w-3 h-3" />{post.comments}</span>
+                      {post.reelPlays > 0 && <span className="flex items-center gap-1"><Play className="w-3 h-3" />{formatNumber(post.reelPlays)} plays</span>}
+                      {post.url && (
+                        <a href={post.url} target="_blank" rel="noopener noreferrer"
+                          className="hover:underline cursor-pointer ml-auto flex items-center gap-0.5" style={{ color: PINK }}>
+                          View <ExternalLink className="w-2.5 h-2.5" />
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      )}
+
+      {/* Comments */}
       {topComments.length > 0 && (
         <motion.div variants={fadeUp}>
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-sm font-semibold">Comments ({filteredComments.length})</h2>
-            <div className="relative"><Search className="w-3 h-3 absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <h2 className="text-sm font-bold">Comments ({filteredComments.length})</h2>
+            <div className="relative">
+              <Search className="w-3 h-3 absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
               <input type="text" placeholder="Search comments..." value={commentSearch} onChange={(e) => setCommentSearch(e.target.value)}
                 className="text-xs pl-7 pr-3 py-1.5 rounded-lg border border-border bg-card focus:outline-none focus:ring-1 focus:ring-pink-500 w-48" />
             </div>
           </div>
-          <div className="space-y-1.5 max-h-[350px] overflow-y-auto">
+          <div className="space-y-2 max-h-[400px] overflow-y-auto pr-1">
             {filteredComments.map((c: any, i: number) => (
-              <div key={i} className="rounded-lg border border-border p-2.5 text-sm">
-                <p className="text-foreground/80 italic">&ldquo;{c.text}&rdquo;</p>
-                <p className="text-[10px] text-muted-foreground mt-1">— @{c.author}</p>
+              <div key={i} className="rounded-xl border border-border bg-card p-3 hover:shadow-sm transition-shadow">
+                <p className="text-sm text-foreground/80 italic leading-relaxed">&ldquo;{c.text}&rdquo;</p>
+                <div className="flex items-center gap-2 mt-1.5">
+                  <p className="text-[10px] text-muted-foreground font-medium">— @{c.author}</p>
+                  {c.likes > 0 && <span className="text-[10px] text-muted-foreground">| {c.likes} likes</span>}
+                  {c.sentiment && (
+                    <span className={cn("text-[9px] font-medium px-1.5 py-0.5 rounded ml-auto",
+                      c.sentiment === "negative" ? "bg-red-100 text-red-600" :
+                      c.sentiment === "positive" ? "bg-green-100 text-green-600" :
+                      "bg-gray-100 text-gray-500"
+                    )}>{c.sentiment}</span>
+                  )}
+                </div>
               </div>
             ))}
           </div>

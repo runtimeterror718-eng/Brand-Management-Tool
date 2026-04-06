@@ -7,7 +7,7 @@ install:
 
 # Download NLP models
 setup-models:
-	bash setup_models.sh
+	bash scripts/setup_models.sh
 
 # Run the API server (dev)
 dev:
@@ -21,9 +21,9 @@ worker:
 beat:
 	celery -A workers.celery_app beat --loglevel=info
 
-# Run React frontend
+# Run Next.js frontend (BrandScope)
 frontend:
-	cd frontend && npm install && npm start
+	cd brandscope && npm install && npm run dev
 
 # Run tests
 test:

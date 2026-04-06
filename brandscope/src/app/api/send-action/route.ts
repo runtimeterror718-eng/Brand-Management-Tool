@@ -2,13 +2,16 @@ import { NextResponse } from "next/server";
 
 // Team email routing — in production, this would connect to SendGrid/SES/Slack
 const TEAM_CONTACTS: Record<string, { email: string; slack?: string }> = {
-  "Operations": { email: "ops@pw.live", slack: "#ops-alerts" },
-  "Product": { email: "product@pw.live", slack: "#product-alerts" },
-  "Engineering": { email: "engineering@pw.live", slack: "#eng-alerts" },
-  "Communications/PR": { email: "pr@pw.live", slack: "#pr-war-room" },
-  "HR": { email: "hr@pw.live", slack: "#hr-alerts" },
-  "Business/Finance": { email: "finance@pw.live", slack: "#finance-alerts" },
-  "Brand/Marketing": { email: "marketing@pw.live", slack: "#marketing-alerts" },
+  "Product Team": { email: "product@pw.live", slack: "#product-engineering" },
+  "Finance Team": { email: "finance@pw.live", slack: "#finance-alerts" },
+  "Legal Team": { email: "legal@pw.live", slack: "#legal-alerts" },
+  "HR Team": { email: "hr@pw.live", slack: "#hr-alerts" },
+  "Batch Operations Team": { email: "batch-ops@pw.live", slack: "#batch-operations" },
+  "YouTube Team": { email: "youtube@pw.live", slack: "#youtube-content" },
+  "PR Team": { email: "pr@pw.live", slack: "#pr-war-room" },
+  "Vidyapeeth Operations Team": { email: "vidyapeeth@pw.live", slack: "#vidyapeeth-ops" },
+  "Marketing Team": { email: "marketing@pw.live", slack: "#marketing-campaigns" },
+  "Customer Support Team": { email: "support@pw.live", slack: "#customer-support" },
 };
 
 export async function POST(request: Request) {

@@ -1,7 +1,7 @@
 """
 Instagram scraper — negative PR detection engine.
 
-Owner: Abhishek
+Owner: Team A
 
 Pipeline:
   1. Scrape ecosystem accounts (competitors, meme pages, trolls, own brand)
@@ -301,8 +301,8 @@ class SessionPool:
 
     def _create_session(self, username: str, password: str) -> Optional[IGSession]:
         L = instaloader.Instaloader()
-        session_dir = os.path.join(os.path.dirname(__file__), "..")
-        session_file = os.path.join(session_dir, f".instaloader-session-{username}")
+        session_dir = os.path.join(os.path.dirname(__file__), "..", "secrets")
+        session_file = os.path.join(session_dir, f"instaloader-session-{username}")
         try:
             L.load_session_from_file(username, session_file)
             logger.info("Loaded saved session for @%s", username)
@@ -554,7 +554,7 @@ def _scrape_profile(
 
 def _load_ig_cookies() -> dict:
     """Load IG auth cookies from .ig-cookies.json if available."""
-    cookie_file = os.path.join(os.path.dirname(__file__), "..", ".ig-cookies.json")
+    cookie_file = os.path.join(os.path.dirname(__file__), "..", "secrets", "ig-cookies.json")
     if os.path.exists(cookie_file):
         import json as _json
         with open(cookie_file) as f:

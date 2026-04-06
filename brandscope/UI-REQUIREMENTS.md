@@ -1,8 +1,8 @@
 # OVAL Dashboard — UI/UX Requirements
 
-> Learned from Abhishek's feedback across this session. Reference this before making any UI changes.
+> Learned from team feedback across sessions. Reference this before making any UI changes.
 
-## What Abhishek Likes
+## What We Want
 - Clean, minimal, data-dense layouts (Bloomberg terminal meets Notion)
 - Solid card backgrounds with subtle drop shadows — NOT glass/blur effects
 - Numbers that count up on load (AnimatedNumber component)
@@ -16,7 +16,7 @@
 - Bold section headings, uppercase tracking-widest for labels
 - "Live" badge indicator (green dot with pulse)
 
-## What Abhishek Does NOT Like
+## What We Do NOT Want
 - Glass/glassmorphism effects on cards (LiquidCard, blur filters)
 - Markdown symbols showing in rendered text (###, **, *, etc.)
 - Long walls of LLM-generated text — wants bullet points, max 6

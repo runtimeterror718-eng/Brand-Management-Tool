@@ -1,7 +1,7 @@
 """
 SEO + News scraper — Google News RSS, SERP, long-tail keyword tracking.
 
-Owner: Abhishek
+Owner: Team A
 Libraries: feedparser, trafilatura
 Auth: None for RSS | Text-only (no transcription needed)
 """

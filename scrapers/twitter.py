@@ -1,7 +1,7 @@
 """
 X / Twitter scraper — twikit.
 
-Owner: Abhishek
+Owner: Team A
 Auth: Username/password → cookies | Proxy: Datacenter (guest) / Residential (auth)
 """
 
