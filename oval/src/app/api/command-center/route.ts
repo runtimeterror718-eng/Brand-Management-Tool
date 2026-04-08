@@ -5,7 +5,7 @@ import { getCached, setCache } from "@/lib/api-cache";
 import { isDemoMode, demoCommandCenter } from "@/lib/demo-data";
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
-const key = process.env.SUPABASE_SERVICE_KEY || process.env.NEXT_PUBLIC_SUPABASE_KEY || "";
+const key = process.env.NEXT_PUBLIC_SUPABASE_KEY || "";
 
 async function getAllBrandIds(sb: any): Promise<string[]> {
   const { data } = await sb.from("brands").select("id").or("name.eq.PhysicsWallah,name.eq.PW Live Smoke");

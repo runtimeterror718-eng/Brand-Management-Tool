@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, MessageCircle, X, Send, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 interface Source {
   content_text: string;
@@ -34,6 +35,13 @@ export default function AskOval() {
         body: JSON.stringify({ question: query }),
       });
       const data = await resp.json();
+      if (data.presentation_only) {
+        setIsOpen(false);
+        toast.info("This feature requires Secret Keys and can be demonstrated during presentation", {
+          duration: 5000,
+        });
+        return;
+      }
       setResult(data);
     } catch {
       setResult({ answer: "Failed to connect. Check your API configuration.", sources: [], llm: false });

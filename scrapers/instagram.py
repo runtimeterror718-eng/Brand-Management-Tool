@@ -45,18 +45,15 @@ logger = logging.getLogger(__name__)
 
 # Decodo (Smartproxy) Indian residential proxies — each port = different residential IP
 # Uses http:// CONNECT tunnel (traffic to IG is still HTTPS end-to-end)
-PROXY_LIST = [
-    "http://splsr8bas0:w9O~6sfEtNdSq7q1bx@in.decodo.com:10001",
-    "http://splsr8bas0:w9O~6sfEtNdSq7q1bx@in.decodo.com:10002",
-    "http://splsr8bas0:w9O~6sfEtNdSq7q1bx@in.decodo.com:10003",
-    "http://splsr8bas0:w9O~6sfEtNdSq7q1bx@in.decodo.com:10004",
-    "http://splsr8bas0:w9O~6sfEtNdSq7q1bx@in.decodo.com:10005",
-    "http://splsr8bas0:w9O~6sfEtNdSq7q1bx@in.decodo.com:10006",
-    "http://splsr8bas0:w9O~6sfEtNdSq7q1bx@in.decodo.com:10007",
-    "http://splsr8bas0:w9O~6sfEtNdSq7q1bx@in.decodo.com:10008",
-    "http://splsr8bas0:w9O~6sfEtNdSq7q1bx@in.decodo.com:10009",
-    "http://splsr8bas0:w9O~6sfEtNdSq7q1bx@in.decodo.com:10010",
-]
+# Set DECODO_USER and DECODO_PASS in secrets/.env.keys
+_DECODO_USER = os.environ.get("DECODO_USER", "")
+_DECODO_PASS = os.environ.get("DECODO_PASS", "")
+_DECODO_HOST = os.environ.get("DECODO_HOST", "in.decodo.com")
+PROXY_LIST = (
+    [f"http://{_DECODO_USER}:{_DECODO_PASS}@{_DECODO_HOST}:{p}" for p in range(10001, 10011)]
+    if _DECODO_USER and _DECODO_PASS
+    else []
+)
 
 
 class ProxyPool:
@@ -172,7 +169,8 @@ MONITORED_HASHTAGS = [
     "physicswallahfraud",          # Fraud allegations
     "pwrefund",                    # Refund complaints
     "pwteachers",                  # Teacher content
-    "jeeneetmemes",                # Student sentiment
+    # "jeeneetmemes" removed — too broad, attracts unrelated meme/crush/love posts
+    # that students spam with generic hashtags for reach
 ]
 
 # Keywords to detect PW mentions in captions (case-insensitive)
@@ -204,6 +202,22 @@ PW_MENTION_HASHTAGS = [
     "pwcontroversy", "pwfraud", "pwdataleak",
     "sankalp", "pwteachers",
 ]
+
+# Hashtags that clearly indicate non-PW content — reject posts containing these
+# even if they pass the PW mention check (e.g. via #pw being spammed for reach)
+BLOCKLIST_HASHTAGS: frozenset[str] = frozenset({
+    # Relationship / crush content
+    "flames", "crushedits", "crushes", "crush", "crushgoals",
+    "crushstory", "proposalday", "lovequotes", "dil", "ishq",
+    "pyaar", "mohabbat", "boyfriend", "girlfriend", "bae",
+    # Generic viral/entertainment spam (not educational)
+    "trendingreels", "trendingsongs", "explorepage", "exploremore",
+    "viralreels", "viralvideo", "reelsviral", "reelsindia",
+    "feelsvideo", "sadreels", "sadstatus", "lovesongs",
+    "followforfollow", "likeforlike", "f4f", "l4l",
+    # Unrelated meme/entertainment
+    "memesdaily", "funnyvideos", "comedy", "dankмемы",
+})
 
 
 # ---------------------------------------------------------------------------
@@ -422,12 +436,21 @@ def _parse_api_media(item: dict, source_account: str = "") -> dict[str, Any]:
 
 
 def _caption_mentions_pw(caption: str, hashtags: list[str]) -> bool:
-    """Check if caption/hashtags mention PW in any form."""
+    """Check if caption/hashtags mention PW in any form.
+
+    Returns False immediately if the post contains blocklisted hashtags that
+    clearly signal non-PW content (crush/love/viral entertainment spam).
+    """
+    lower_tags = [h.lower() for h in hashtags]
+
+    # Reject posts whose hashtags clearly signal unrelated content
+    if any(tag in BLOCKLIST_HASHTAGS for tag in lower_tags):
+        return False
+
     text = caption.lower()
     for kw in PW_MENTION_KEYWORDS:
         if kw.lower() in text:
             return True
-    lower_tags = [h.lower() for h in hashtags]
     for tag in PW_MENTION_HASHTAGS:
         if tag.lower() in lower_tags:
             return True
@@ -868,8 +891,10 @@ class InstagramScraper(BaseScraper):
             if src in ("own_brand", "ex_pw"):
                 shortlisted.append(p)
             elif src == "ecosystem":
-                # Ecosystem accounts are specifically about edtech/PW — keep all
-                shortlisted.append(p)
+                # Ecosystem/student accounts post diverse content (memes, crushes, etc.)
+                # Only keep posts that actually mention PW
+                if _caption_mentions_pw(p.get("caption_text", ""), p.get("hashtags", [])):
+                    shortlisted.append(p)
             elif _caption_mentions_pw(p.get("caption_text", ""), p.get("hashtags", [])):
                 shortlisted.append(p)
 

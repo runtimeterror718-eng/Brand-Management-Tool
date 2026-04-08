@@ -112,7 +112,7 @@ Return JSON:
 }
 
 export async function GET() {
-  if (isDemoMode()) return NextResponse.json(demoActionables);
+  return NextResponse.json(demoActionables);
   const brandId = await getBrandId();
   if (!brandId) return NextResponse.json({ live: false });
 

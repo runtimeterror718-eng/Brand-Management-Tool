@@ -4,7 +4,7 @@ import { getCached, setCache } from "@/lib/api-cache";
 import { isDemoMode, demoNeuralMap } from "@/lib/demo-data";
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
-const key = process.env.SUPABASE_SERVICE_KEY || process.env.NEXT_PUBLIC_SUPABASE_KEY || "";
+const key = process.env.NEXT_PUBLIC_SUPABASE_KEY || "";
 
 interface Node { id: string; label: string; group: string; size: number; color: string; metadata?: any }
 interface Link { source: string; target: string; label: string; strength: number; sentiment: "positive" | "negative" | "neutral" | "mixed"; mentions: number }

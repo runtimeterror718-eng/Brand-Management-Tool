@@ -13,7 +13,7 @@
 import { createClient } from "@supabase/supabase-js";
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
-const key = process.env.SUPABASE_SERVICE_KEY || process.env.NEXT_PUBLIC_SUPABASE_KEY || "";
+const key = process.env.NEXT_PUBLIC_SUPABASE_KEY || "";
 const openaiKey = process.env.OPENAI_API_KEY || "";
 
 export function getSupabase() {

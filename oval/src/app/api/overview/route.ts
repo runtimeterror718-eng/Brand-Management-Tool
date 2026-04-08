@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { ragQuery, isRAGEnabled, embedText, searchMentions, searchNegativeMentions, getSupabase } from "@/lib/rag";
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
-const key = process.env.SUPABASE_SERVICE_KEY || process.env.NEXT_PUBLIC_SUPABASE_KEY || "";
+const key = process.env.NEXT_PUBLIC_SUPABASE_KEY || "";
 
 async function getBrandIds(sb: any): Promise<{ ids: string[]; name: string }> {
   const { data } = await sb.from("brands").select("id, name").eq("name", "PhysicsWallah");
